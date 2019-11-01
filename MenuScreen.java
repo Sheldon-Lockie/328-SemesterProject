@@ -55,8 +55,12 @@ public class MenuScreen extends BaseScreen
                    }
                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                    {
-                        Gdx.app.log("Play Button Clicked",null);
+                        //Gdx.app.log("Play Button Clicked",null);
+                        /****************************************************************/
+                        /********************This is where next scene is called**********/ 
                         
+                        
+                        /***************************************************************/
                    }
                    
                 }
@@ -83,6 +87,7 @@ public class MenuScreen extends BaseScreen
                     }
                      if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                      {    
+                         BaseGame.setActiveScreen( new SettingsScreen());
                          Gdx.app.log("Settings Button Clicked",null);
                      }
                    
