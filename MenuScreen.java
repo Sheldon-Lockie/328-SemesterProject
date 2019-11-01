@@ -9,8 +9,6 @@ public class MenuScreen extends BaseScreen
     Button ExitButton;
     Button SettingsButton;
     Button PlayButton;
-  
-    
     private boolean ExitHover;
     private boolean PlayHover;
     private boolean SettingsHover;
@@ -55,6 +53,11 @@ public class MenuScreen extends BaseScreen
                         PlayButton.loadTexture("Assets/Img/Buttons/Play_Highlighted.png");
                         
                    }
+                   if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+                   {
+                        Gdx.app.log("Play Button Clicked",null);
+                        
+                   }
                    
                 }
                 else
@@ -77,8 +80,11 @@ public class MenuScreen extends BaseScreen
                         SettingsButton.remove();
                         SettingsButton = new Button(300,250,uiStage);
                         SettingsButton.loadTexture("Assets/Img/Buttons/Settings_Highlighted.png");
-                        
-                   }
+                    }
+                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+                     {    
+                         Gdx.app.log("Settings Button Clicked",null);
+                     }
                    
                 }
                 else
@@ -95,17 +101,19 @@ public class MenuScreen extends BaseScreen
                     if (ExitToggle == false)
                     {
                         ExitToggle = true;
-                        Gdx.app.log("Mouse X location is ",Float.toString(Gdx.input.getX()));
-                        Gdx.app.log("Mouse Y location is ",Float.toString(Gdx.input.getY()));
-                        Gdx.app.log("The Play Button is being hovered over",null);
+                        //Gdx.app.log("Mouse X location is ",Float.toString(Gdx.input.getX()));
+                        //Gdx.app.log("Mouse Y location is ",Float.toString(Gdx.input.getY()));
+                        //Gdx.app.log("The Exit Button is being hovered over",null);
                         ExitButton.remove();
                         ExitButton = new Button(300,150,uiStage);
                         ExitButton.loadTexture("Assets/Img/Buttons/Exit_Highlighted.png");
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-                        {
-                            Gdx.app.exit();
-                        }
                         
+                        
+                   }
+                   if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+                   {
+                        Gdx.app.log("Exit Button Clicked",null);
+                        Gdx.app.exit();
                    }
                    
                 }
