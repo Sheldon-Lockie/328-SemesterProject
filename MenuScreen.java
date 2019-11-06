@@ -59,7 +59,7 @@ public class MenuScreen extends BaseScreen
                         /****************************************************************/
                         /********************This is where next scene is called**********/ 
                         
-                        
+                        BaseGame.setActiveScreen(new GameScreen());
                         /***************************************************************/
                    }
                    
@@ -88,7 +88,7 @@ public class MenuScreen extends BaseScreen
                      if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                      {    
                          BaseGame.setActiveScreen( new SettingsScreen());
-                         Gdx.app.log("Settings Button Clicked",null);
+                         //Gdx.app.log("Settings Button Clicked",null);
                      }
                    
                 }
