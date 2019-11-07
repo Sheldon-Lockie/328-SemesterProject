@@ -12,8 +12,8 @@ public class Launcher
         LwjglApplicationConfiguration cfg =  new LwjglApplicationConfiguration();
         //cfg.width =  LwjglApplicationConfiguration.getDesktopDisplayMode().width;
         //cfg.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
-        cfg.height = 600;
-        cfg.width = 800;
+        cfg.height = 900;
+        cfg.width = 1600;
         //cfg.fullscreen = true;
         cfg.title = "WIP";
         
