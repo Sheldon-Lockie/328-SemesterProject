@@ -1,35 +1,46 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Texture;
 
-
-
-
+// This class will manage the menu screen
 public class MenuScreen extends BaseScreen
 {
-    Button ExitButton;
-    Button SettingsButton;
-    Button PlayButton;
+    // button variables
+    private Button ExitButton;
+    private Button SettingsButton;
+    private Button PlayButton;
     private boolean ExitHover;
     private boolean PlayHover;
     private boolean SettingsHover;
     private boolean PlayToggle;
     private boolean ExitToggle;
     private boolean SettingsToggle;
-    private static int ViewportHeight = 900;
-    private static int ViewportWidth = 1600;
+    
+    // Viewport variables
+    private static int ViewportHeight;
+    private static int ViewportWidth;
+    
+    // Background variables
+    private BaseActor backgroundImage;
+    private BaseActor gameTitle;
     
     public void initialize()
     {
-        BaseActor backgroundImage = new BaseActor(0,0, mainStage);
+        // Add background image
+        backgroundImage = new BaseActor(0,0, mainStage);
         backgroundImage.loadTexture("Assets/Img/Menu/Background.jpg");
         backgroundImage.setSize(1600, 900);
         
-        BaseActor gameTitle = new BaseActor(0,0, mainStage);
+        // Add game title
+        gameTitle = new BaseActor(0,0, mainStage);
         gameTitle.loadTexture("Assets/Img/Menu/GameTitle.png");
         gameTitle.centerAtPosition(800,450);
         gameTitle.moveBy(0,300);
-                
+            
+        // Initialize button variables
         PlayHover = false;
         SettingsHover =  false;
         ExitHover =  false;
@@ -45,6 +56,10 @@ public class MenuScreen extends BaseScreen
         Pixmap pm = new Pixmap(Gdx.files.internal("Assets/Img/Cursors/CursorSword.png"));
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
         pm.dispose();
+        
+        // Set screen to 1600 by 900
+        ViewportHeight = 900;
+        ViewportWidth = 1600;
     }
  
     public void update (float dt)
