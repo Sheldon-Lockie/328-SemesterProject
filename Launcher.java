@@ -10,11 +10,8 @@ public class Launcher
     {
         Game myGame = new MainGame();
         LwjglApplicationConfiguration cfg =  new LwjglApplicationConfiguration();
-        //cfg.width =  LwjglApplicationConfiguration.getDesktopDisplayMode().width;
-        //cfg.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
         cfg.height = 900;
         cfg.width = 1600;
-        //cfg.fullscreen = true;
         cfg.title = "WIP";
         
        
