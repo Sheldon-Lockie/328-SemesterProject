@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=ButtonCreation
+comment1.params=stage\ t1\ t2\ x\ y\ f
+comment1.target=void\ CreateButton(com.badlogic.gdx.scenes.scene2d.Stage,\ com.badlogic.gdx.graphics.Texture,\ com.badlogic.gdx.graphics.Texture,\ int,\ int,\ Function)
+numComments=2
