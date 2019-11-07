@@ -21,12 +21,15 @@ public class MenuScreen extends BaseScreen
     
     public void initialize()
     {
+        BaseActor backgroundImage = new BaseActor(0,0, mainStage);
+        backgroundImage.loadTexture("Assets/Img/Menu/Background.jpg");
+        backgroundImage.setSize(1600, 900);
+        
         BaseActor gameTitle = new BaseActor(0,0, mainStage);
-        gameTitle.loadTexture("assets/GameTitle.png");
+        gameTitle.loadTexture("Assets/Img/Menu/GameTitle.png");
         gameTitle.centerAtPosition(800,450);
         gameTitle.moveBy(0,300);
-        
-        
+                
         PlayHover = false;
         SettingsHover =  false;
         ExitHover =  false;
