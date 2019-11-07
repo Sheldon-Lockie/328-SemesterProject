@@ -2,8 +2,8 @@
 comment0.target=GameScreen
 comment1.params=
 comment1.target=void\ initialize()
-comment2.params=
-comment2.target=void\ run()
-comment3.params=dt
-comment3.target=void\ update(float)
+comment2.params=dt
+comment2.target=void\ update(float)
+comment3.params=
+comment3.target=void\ HelpButtonCheck()
 numComments=4
