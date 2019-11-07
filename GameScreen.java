@@ -2,6 +2,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Input.Keys;
 
 
 
@@ -44,10 +45,16 @@ public class GameScreen extends BaseScreen
     public void update (float dt)
     {
         HelpButtonCheck();
-     
-       // Gdx.app.log("Mouse X location is ",Float.toString(Gdx.input.getX()));
-       // Gdx.app.log("Mouse Y location is ",Float.toString(Gdx.input.getY()));
+        EscCheck();
+       
     
+    }
+    public void EscCheck()
+    {
+        if (Gdx.input.isKeyPressed(Keys.ESCAPE))
+        {
+            BaseGame.setActiveScreen( new MenuScreen());
+        }
     }
     public void HelpButtonCheck()
     {

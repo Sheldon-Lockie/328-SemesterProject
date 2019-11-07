@@ -4,4 +4,6 @@ comment1.params=
 comment1.target=void\ initialize()
 comment2.params=dt
 comment2.target=void\ update(float)
-numComments=3
+comment3.params=
+comment3.target=void\ EscCheck()
+numComments=4
