@@ -66,7 +66,11 @@ public class MenuScreen extends BaseScreen
     {
            //Gdx.app.log("Mouse X location is ",Float.toString(Gdx.input.getX()));
            //Gdx.app.log("Mouse Y location is ",Float.toString(Gdx.input.getY()));
-            if (Gdx.input.getX() > 700 && Gdx.input.getX() < 900)
+           ButtonManager();     
+    }
+    private void ButtonManager()
+    {
+        if (Gdx.input.getX() > 700 && Gdx.input.getX() < 900)
             {
                 if (Gdx.input.getY() > 275.0f && Gdx.input.getY() < 350.0f)
                 {
