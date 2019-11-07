@@ -10,6 +10,7 @@ import com.badlogic.gdx.Input.Keys;
 public class GameScreen extends BaseScreen
 {
     Button HelpButton;
+    Button ArcherTower;
     boolean HelpToggle;
     boolean HelpHover;
     BaseActor GameArea;
@@ -28,6 +29,11 @@ public class GameScreen extends BaseScreen
         HelpButton = new Button(1300,850,uiStage);
         HelpButton.loadTexture("Assets/Img/Buttons/Help_Unhighlighted.png");
         HelpButton.setSize(32,32);
+        ArcherTower =  new Button(1360,735,uiStage);
+        ArcherTower.loadTexture("Assets/Img/Buttons/Unit1_Unhighlighted.png");
+        ArcherTower.setSize(110,110);
+        
+        
         Pixmap pm = new Pixmap(Gdx.files.internal("Assets/Img/Cursors/CursorSword.png"));
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
         pm.dispose();
@@ -53,6 +59,7 @@ public class GameScreen extends BaseScreen
     {
         if (Gdx.input.isKeyPressed(Keys.ESCAPE))
         {
+            //could put a prompt here if we want??
             BaseGame.setActiveScreen( new MenuScreen());
         }
     }
