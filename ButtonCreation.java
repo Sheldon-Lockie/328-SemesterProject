@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent.Type;
 public class ButtonCreation
 {
     //Create a button with up and down textures, if given a function, create a lambda expression for respective button
-    public static void CreateButton(Stage stage, Texture t1, Texture t2, int x, int y, Function f)
+    public static void CreateButton(Stage stage, Texture t1, Texture t2, int x, int y, int sizeX, int sizeY, Function f)
     {
         TextureRegionDrawable tUp = new TextureRegionDrawable(new TextureRegion(t1));
         TextureRegionDrawable tDown = new TextureRegionDrawable(new TextureRegion(t2));
@@ -35,6 +35,7 @@ public class ButtonCreation
         
         Button button = new Button(buttonStyle);
         button.setPosition(x, y);
+        button.setSize(sizeX, sizeY);
         
         
         if(f!= null)

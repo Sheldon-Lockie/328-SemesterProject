@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.scenes.scene2d.Group;
 
 /**
  * Extends functionality of the LibGDX Actor class.
@@ -32,7 +33,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * @see #Actor
  * @author Lee Stemkoski
  */
-public class BaseActor extends Actor
+public class BaseActor extends Group
 {
     private Animation<TextureRegion> animation;
     private float elapsedTime;
@@ -48,7 +49,7 @@ public class BaseActor extends Actor
 
     // stores size of game world for all actors
     private static Rectangle worldBounds;
-    
+
     public BaseActor(float x, float y, Stage s)
     {
         // call constructor from Actor class
@@ -71,6 +72,25 @@ public class BaseActor extends Actor
         deceleration = 0;
 
         boundaryPolygon = null;
+    }
+
+    /** 
+     *  If this object moves completely past the world bounds,
+     *  adjust its position to the opposite side of the world.
+     */
+    public void wrapAroundWorld()
+    {
+        if (getX() + getWidth() < 0)
+            setX( worldBounds.width );
+
+        if (getX() > worldBounds.width)    
+            setX( -getWidth());
+
+        if (getY() + getHeight() < 0)
+            setY( worldBounds.height );
+
+        if (getY() > worldBounds.height)
+            setY( -getHeight() );
     }
 
     /**
@@ -360,7 +380,7 @@ public class BaseActor extends Actor
         // update velocity
         setSpeed(speed);
 
-        // apply velocity
+        // update position according to value stored in velocity vector
         moveBy( velocityVec.x * dt, velocityVec.y * dt );
 
         // reset acceleration
@@ -499,11 +519,11 @@ public class BaseActor extends Actor
         if (getX() + getWidth() > worldBounds.width)    
             setX(worldBounds.width - getWidth());
         if (getY() < 0)
-            setY(0);
+            setY(150);
         if (getY() + getHeight() > worldBounds.height)
             setY(worldBounds.height - getHeight());
     }
-    
+
     /**
      *  Center camera on this object, while keeping camera's range of view 
      *  (determined by screen size) completely within world bounds.
@@ -514,14 +534,14 @@ public class BaseActor extends Actor
         Viewport v = this.getStage().getViewport();
 
         // center camera on actor
-        cam.position.set( this.getX() + this.getOriginX(), this.getY() + this.getOriginY(), 0 );
-
+        cam.position.set( this.getX() + 400 + this.getOriginX(), this.getY() + this.getOriginY(), 0 );
+ 
         // bound camera to layout
         cam.position.x = MathUtils.clamp(cam.position.x, cam.viewportWidth/2,  worldBounds.width -  cam.viewportWidth/2);
         cam.position.y = MathUtils.clamp(cam.position.y, cam.viewportHeight/2, worldBounds.height - cam.viewportHeight/2);
         cam.update();
     }
-    
+
     // ----------------------------------------------
     // Instance list methods
     // ----------------------------------------------
@@ -538,13 +558,13 @@ public class BaseActor extends Actor
     public static ArrayList<BaseActor> getList(Stage stage, String className)
     {
         ArrayList<BaseActor> list = new ArrayList<BaseActor>();
-        
+
         Class theClass = null;
         try
         {  theClass = Class.forName(className);  }
         catch (Exception error)
         {  error.printStackTrace();  }
-        
+
         for (Actor a : stage.getActors())
         {
             if ( theClass.isInstance( a ) )
@@ -563,7 +583,7 @@ public class BaseActor extends Actor
     {
         return getList(stage, className).size();
     }
-    
+
     // ----------------------------------------------
     // Actor methods: act and draw
     // ----------------------------------------------
@@ -593,7 +613,6 @@ public class BaseActor extends Actor
      */
     public void draw(Batch batch, float parentAlpha) 
     {
-        super.draw( batch, parentAlpha );
 
         // apply color tint effect
         Color c = getColor(); 
@@ -603,6 +622,8 @@ public class BaseActor extends Actor
             batch.draw( animation.getKeyFrame(elapsedTime), 
                 getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation() );
+
+        super.draw( batch, parentAlpha );
     }
 
 }
