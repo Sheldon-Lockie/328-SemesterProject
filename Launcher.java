@@ -12,7 +12,7 @@ public class Launcher
         LwjglApplicationConfiguration cfg =  new LwjglApplicationConfiguration();
         cfg.height = 900;
         cfg.width = 1600;
-        cfg.title = "WIP";
+        cfg.title = "Final Stand";
         
        
 
