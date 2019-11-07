@@ -18,8 +18,15 @@ public class MenuScreen extends BaseScreen
     private boolean SettingsToggle;
     private static int ViewportHeight = 900;
     private static int ViewportWidth = 1600;
+    
     public void initialize()
     {
+        BaseActor gameTitle = new BaseActor(0,0, mainStage);
+        gameTitle.loadTexture("assets/GameTitle.png");
+        gameTitle.centerAtPosition(800,450);
+        gameTitle.moveBy(0,300);
+        
+        
         PlayHover = false;
         SettingsHover =  false;
         ExitHover =  false;
