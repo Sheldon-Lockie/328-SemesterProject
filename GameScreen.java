@@ -76,7 +76,7 @@ public class GameScreen extends BaseScreen
             if (ArcherTowerPickedUp)
             {
                 HoverTowerAtMousePosition();
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1350 && MouseY > 161 && CheckTowerPlaceMentOverlap() == true)
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap() == true)
                 {
                     new ArcherTower(MouseX,MouseY,mainStage);
                     UnitPickedUp = false;
