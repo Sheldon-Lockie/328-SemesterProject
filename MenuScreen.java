@@ -26,19 +26,29 @@ public class MenuScreen extends BaseScreen
     // Background variables
     private BaseActor backgroundImage;
     private BaseActor gameTitle;
+    private BaseActor swordTitle;
     
     public void initialize()
     {
         // Add background image
         backgroundImage = new BaseActor(0,0, mainStage);
+        // Image found at https://wallpaperbro.com/purple-castle
         backgroundImage.loadTexture("Assets/Img/Menu/Background.jpg");
         backgroundImage.setSize(1600, 900);
         
         // Add game title
         gameTitle = new BaseActor(0,0, mainStage);
-        gameTitle.loadTexture("Assets/Img/Menu/GameTitle.png");
-        gameTitle.centerAtPosition(800,450);
-        gameTitle.moveBy(0,300);
+        gameTitle.loadTexture("Assets/Img/Menu/GameTitle-2.png");
+        gameTitle.centerAtPosition(800, 450);
+        gameTitle.moveBy(0, 300);
+        
+        // Add Sword into title
+        swordTitle = new BaseActor(0, 0, mainStage);
+        swordTitle.loadTexture("Assets/Img/Menu/Sword.png");  
+        swordTitle.setSize(270, 270);
+        swordTitle.centerAtPosition(960, 450);
+        swordTitle.moveBy(0, 300);
+        ;
             
         // Initialize button variables
         PlayHover = false;
@@ -68,6 +78,7 @@ public class MenuScreen extends BaseScreen
            //Gdx.app.log("Mouse Y location is ",Float.toString(Gdx.input.getY()));
            ButtonManager();     
     }
+    
     private void ButtonManager()
     {
         if (Gdx.input.getX() > 700 && Gdx.input.getX() < 900)
@@ -181,8 +192,7 @@ public class MenuScreen extends BaseScreen
                ExitHover = false;
                ExitButton.remove();
                ExitButton = new Button(700,250,uiStage);
-               ExitButton.loadTexture("Assets/Img/Buttons/Exit_Unhighlighted.png");
-            
+               ExitButton.loadTexture("Assets/Img/Buttons/Exit_Unhighlighted.png");           
            }
             
     }
