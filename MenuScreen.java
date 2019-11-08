@@ -27,8 +27,9 @@ public class MenuScreen extends BaseScreen
     private BaseActor gameTitle;
     private BaseActor swordTitle;
     
-    // Song
-    static Music song;
+    // Song variables
+    private static Music song;
+    private boolean isPlaying;
     
     public void initialize()
     {
@@ -58,12 +59,21 @@ public class MenuScreen extends BaseScreen
         ViewportHeight = 900;
         ViewportWidth = 1600;
         
-        // Activate song
-        song = Gdx.audio.newMusic(Gdx.files.internal("Assets/Sounds/Songs/MainMenuTheme-Trimmed.mp3"));
-        song.stop();
-        song.setVolume(0.40f);
-        song.play();
-        song.setLooping(true);
+        // Activate song if it isn't already playing
+        if(song == null)
+        {
+            song = Gdx.audio.newMusic(Gdx.files.internal("Assets/Sounds/Songs/MainMenuTheme-Trimmed.mp3"));
+        }
+        
+        isPlaying = song.isPlaying();
+        
+        if(isPlaying == false)
+        {            
+            song.stop();
+            song.setVolume(0.40f);
+            song.play();
+            song.setLooping(true);
+        }
     }
  
     public void update (float dt)
@@ -89,6 +99,7 @@ public class MenuScreen extends BaseScreen
                 public void run()
                 {
                     song.stop();
+                    song.dispose();
                     BaseGame.setActiveScreen(new GameScreen());
                 }
             });    
@@ -147,6 +158,7 @@ public class MenuScreen extends BaseScreen
                 public void run()
                 {
                     song.stop();
+                    song.dispose();
                     Gdx.app.exit();
                 }
             });        
