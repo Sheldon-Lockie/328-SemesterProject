@@ -17,13 +17,11 @@ public class GameScreen extends BaseScreen
     public static float MouseY;
     public boolean UnitPickedUp;
     public boolean ArcherTowerPickedUp;    //true whenever an object is picked up, and false once placed in game area
-    public boolean Unit2PickedUp;
     /***********************************************************************/
     BaseActor GameArea;     //Placeholder for map area
     BaseActor UnitInfoArea; //Bottom of Screen Unit info area
     BaseActor UnitArea;     //Unit buy area (Right of screen)
     BaseActor ArcherTowerMouse;
-    BaseActor Unit2Mouse;
     public void initialize()
     {
         
@@ -46,19 +44,6 @@ public class GameScreen extends BaseScreen
         /*******************************************************************/
         ButtonCreation HelpButton =  new ButtonCreation();
         ButtonCreation ArcherTowerBtn =  new ButtonCreation();
-        ButtonCreation Unit2Btn =  new ButtonCreation();
-        Unit2Btn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit2_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit2_Highlighted.png")),1480,737,110,110, new Function(){
-            public void run()
-            {
-                Gdx.app.log("Unit2 button was clicked",null);
-                UnitPickedUp = true;
-                Unit2PickedUp = true;
-                Unit2Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit2Mouse.loadTexture("Assets/Img/Towers/Unit2.png");
-                Unit2Mouse.setSize(80,80);
-                Unit2Mouse.setBoundaryPolygon(4);
-            }
-        });
         ArcherTowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit1_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit1_Highlighted.png")),1360,737,110,110, new Function(){
             public void run()
             {
@@ -69,7 +54,6 @@ public class GameScreen extends BaseScreen
                 ArcherTowerMouse.loadTexture("Assets/Img/Towers/ArcherTower.png");
                 ArcherTowerMouse.setSize(80,80);
                 ArcherTowerMouse.setBoundaryPolygon(4);
-
             }
         });
         HelpButton.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Help_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Help_Highlighted.png")),1300,850,32,32, new Function(){
@@ -91,25 +75,13 @@ public class GameScreen extends BaseScreen
             MouseY = 900 - Gdx.input.getY();
             if (ArcherTowerPickedUp)
             {
-                HoverTowerAtMousePosition(ArcherTowerMouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(ArcherTowerMouse) == true)
+                HoverTowerAtMousePosition();
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap() == true)
                 {
                     new ArcherTower(MouseX,MouseY,mainStage);
                     UnitPickedUp = false;
                     ArcherTowerPickedUp = false;
                     ArcherTowerMouse.remove();
-                    
-                }
-            }
-            if (Unit2PickedUp)
-            {
-                HoverTowerAtMousePosition(Unit2Mouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(Unit2Mouse) == true)
-                {
-                    new Unit2(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    Unit2PickedUp = false;
-                    Unit2Mouse.remove();
                     
                 }
             }
@@ -123,34 +95,24 @@ public class GameScreen extends BaseScreen
     
     }
     /** Check for overlap when placing a new unit, false means cant be placed, true means can be placed **/
-    public boolean CheckTowerPlaceMentOverlap(BaseActor ObjectBeingPlaced)
+    public boolean CheckTowerPlaceMentOverlap()
     {
          for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"ArcherTower"))
         {
-            if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+            if (ArcherTowerMouse.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
             {
                 return false;
                 
             }
  
         }
-        for (BaseActor PlacedUnit2TowerActor : BaseActor.getList(mainStage,"Unit2"))
-        {
-            if (ObjectBeingPlaced.overlaps(PlacedUnit2TowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-            {
-                return false;
-                
-            }
- 
-        }
-        
         return true;
     }
     
     
-    public void HoverTowerAtMousePosition(BaseActor TowerType)
+    public void HoverTowerAtMousePosition()
     {
-        TowerType.centerAtPosition(MouseX,MouseY);
+        ArcherTowerMouse.centerAtPosition(MouseX,MouseY);
     }
     public void EscCheck()
     {
