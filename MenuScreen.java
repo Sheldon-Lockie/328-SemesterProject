@@ -7,17 +7,16 @@ import com.badlogic.gdx.graphics.Texture;
 
 // This class will manage the menu screen
 public class MenuScreen extends BaseScreen
-{
-    // button variables
-    private Button ExitButton;
-    private Button SettingsButton;
-    private Button PlayButton;
-    private boolean ExitHover;
-    private boolean PlayHover;
-    private boolean SettingsHover;
-    private boolean PlayToggle;
-    private boolean ExitToggle;
-    private boolean SettingsToggle;
+{   
+    // Button variables
+    private int xPosition;
+    private int yPosition;
+    private int xSize;
+    private int ySize;
+    private ButtonCreation startButton;
+    private ButtonCreation helpButton;
+    private ButtonCreation settingsButton;
+    private ButtonCreation exitButton;
     
     // Viewport variables
     private static int ViewportHeight;
@@ -27,6 +26,9 @@ public class MenuScreen extends BaseScreen
     private BaseActor backgroundImage;
     private BaseActor gameTitle;
     private BaseActor swordTitle;
+    
+    // Song
+    static Music song;
     
     public void initialize()
     {
@@ -48,154 +50,105 @@ public class MenuScreen extends BaseScreen
         swordTitle.setSize(270, 270);
         swordTitle.centerAtPosition(960, 450);
         swordTitle.moveBy(0, 300);
-        ;
-            
-        // Initialize button variables
-        PlayHover = false;
-        SettingsHover =  false;
-        ExitHover =  false;
-        PlayToggle =  false;
-        SettingsToggle = false;
-        ExitToggle = false;
-        PlayButton = new Button(700,550,uiStage);
-        PlayButton.loadTexture("Assets/Img/Buttons/Play_Unhighlighted.png");
-        SettingsButton = new Button(700,400,uiStage);
-        SettingsButton.loadTexture("Assets/Img/Buttons/Settings_Unhighlighted.png");
-        ExitButton = new Button(700,250,uiStage);
-        ExitButton.loadTexture("Assets/Img/Buttons/Exit_Unhighlighted.png");
-        Pixmap pm = new Pixmap(Gdx.files.internal("Assets/Img/Cursors/CursorSword.png"));
-        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
-        pm.dispose();
+        
+        // Initialize all buttons
+        ButtonCreator();
         
         // Set screen to 1600 by 900
         ViewportHeight = 900;
         ViewportWidth = 1600;
+        
+        // Activate song
+        song = Gdx.audio.newMusic(Gdx.files.internal("Assets/Sounds/Songs/MainMenuTheme-Trimmed.mp3"));
+        song.stop();
+        song.setVolume(0.40f);
+        song.play();
+        song.setLooping(true);
     }
  
     public void update (float dt)
     {
-           //Gdx.app.log("Mouse X location is ",Float.toString(Gdx.input.getX()));
-           //Gdx.app.log("Mouse Y location is ",Float.toString(Gdx.input.getY()));
-           ButtonManager();     
+   
     }
     
-    private void ButtonManager()
+    private void ButtonCreator()
     {
-        if (Gdx.input.getX() > 700 && Gdx.input.getX() < 900)
+        // Initialize button variables
+        startButton = new ButtonCreation(); 
+        xPosition = 675;
+        yPosition = 500;
+        xSize = 250;
+        ySize = 100;
+        startButton.CreateButton(mainStage,
+            new Texture(Gdx.files.internal("Assets/Img/Menu/Buttons/PlayButton1.png")),
+            new Texture(Gdx.files.internal("Assets/Img/Menu/Buttons/Playbutton2.png")),
+            xPosition, yPosition,
+            xSize, ySize,
+            new Function()
             {
-                if (Gdx.input.getY() > 275.0f && Gdx.input.getY() < 350.0f)
+                public void run()
                 {
-                    PlayHover = true;
-                    if (PlayToggle == false)
-                    {
-                        PlayToggle = true;
-                        //Gdx.app.log("Mouse X location is ",Float.toString(Gdx.input.getX()));
-                        //Gdx.app.log("Mouse Y location is ",Float.toString(Gdx.input.getY()));
-                        //Gdx.app.log("The Play Button is being hovered over",null);
-                        PlayButton.remove();
-                        PlayButton = new Button(700,550,uiStage);
-                        PlayButton.loadTexture("Assets/Img/Buttons/Play_Highlighted.png");
-                        
-                   }
-                   if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-                   {
-                        //Gdx.app.log("Play Button Clicked",null);
-                        /****************************************************************/
-                        /********************This is where next scene is called**********/ 
-                        
-                        BaseGame.setActiveScreen(new GameScreen());
-                        /***************************************************************/
-                   }
-                   
+                    song.stop();
+                    BaseGame.setActiveScreen(new GameScreen());
                 }
-                else
-                {
-                    PlayToggle =  false;
-                    PlayHover = false;
-                    PlayButton.remove();
-                    PlayButton = new Button(700,550,uiStage);
-                    PlayButton.loadTexture("Assets/Img/Buttons/Play_Unhighlighted.png");     
-                }
-                if (Gdx.input.getY() > 425.0f && Gdx.input.getY() < 500.0f)
-                {
-                    SettingsHover = true;
-                    if (SettingsToggle == false)
-                    {
-                        SettingsToggle = true;
-                        //Gdx.app.log("Mouse X location is ",Float.toString(Gdx.input.getX()));
-                        //Gdx.app.log("Mouse Y location is ",Float.toString(Gdx.input.getY()));
-                        //Gdx.app.log("The Play Button is being hovered over",null);
-                        SettingsButton.remove();
-                        SettingsButton = new Button(700,400,uiStage);
-                        SettingsButton.loadTexture("Assets/Img/Buttons/Settings_Highlighted.png");
-                    }
-                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-                     {    
-                         BaseGame.setActiveScreen( new SettingsScreen());
-                         //Gdx.app.log("Settings Button Clicked",null);
-                     }
-                   
-                }
-                else
-                {
-                    SettingsToggle =  false;
-                    SettingsHover = false;
-                    SettingsButton.remove();
-                    SettingsButton = new Button(700,400,uiStage);
-                    SettingsButton.loadTexture("Assets/Img/Buttons/Settings_Unhighlighted.png");     
-                }
-                if (Gdx.input.getY() > 575.0f && Gdx.input.getY() < 650.0f)
-                {
-                    ExitHover = true;
-                    if (ExitToggle == false)
-                    {
-                        ExitToggle = true;
-                        //Gdx.app.log("Mouse X location is ",Float.toString(Gdx.input.getX()));
-                        //Gdx.app.log("Mouse Y location is ",Float.toString(Gdx.input.getY()));
-                        //Gdx.app.log("The Exit Button is being hovered over",null);
-                        ExitButton.remove();
-                        ExitButton = new Button(700,250,uiStage);
-                        ExitButton.loadTexture("Assets/Img/Buttons/Exit_Highlighted.png");
-                        
-                        
-                   }
-                   if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-                   {
-                        Gdx.app.log("Exit Button Clicked",null);
-                        Gdx.app.exit();
-                   }
-                   
-                }
-                else
-                {
-                    ExitToggle =  false;
-                    ExitHover = false;
-                    ExitButton.remove();
-                    ExitButton = new Button(700,250,uiStage);
-                    ExitButton.loadTexture("Assets/Img/Buttons/Exit_Unhighlighted.png");     
-                }
-                //Gdx.app.log("The button  is being hovered over",null);
-           }
-           else
-           {
-               PlayToggle =  false;
-               PlayHover = false;
-               PlayButton.remove();
-               PlayButton = new Button(700,550,uiStage);
-               PlayButton.loadTexture("Assets/Img/Buttons/Play_Unhighlighted.png");
-               SettingsToggle =  false;
-               SettingsHover = false;
-               SettingsButton.remove();
-               SettingsButton = new Button(700,400,uiStage);
-               SettingsButton.loadTexture("Assets/Img/Buttons/Settings_Unhighlighted.png"); 
-               ExitToggle =  false;
-               ExitHover = false;
-               ExitButton.remove();
-               ExitButton = new Button(700,250,uiStage);
-               ExitButton.loadTexture("Assets/Img/Buttons/Exit_Unhighlighted.png");           
-           }
+            });    
             
+        // Initialize button variables
+        helpButton = new ButtonCreation(); 
+        xPosition = 525;
+        yPosition = 350;
+        xSize = 250;
+        ySize = 100;
+        startButton.CreateButton(mainStage,
+            new Texture(Gdx.files.internal("Assets/Img/Menu/Buttons/HelpButton1.png")),
+            new Texture(Gdx.files.internal("Assets/Img/Menu/Buttons/HelpButton2.png")),
+            xPosition, yPosition,
+            xSize, ySize,
+            new Function()
+            {
+                public void run()
+                {
+                    BaseGame.setActiveScreen(new HelpScreen());
+                }
+            });    
+            
+        // Initialize button variables
+        settingsButton = new ButtonCreation(); 
+        xPosition = 825;
+        yPosition = 350;
+        xSize = 250;
+        ySize = 100;
+        startButton.CreateButton(mainStage,
+            new Texture(Gdx.files.internal("Assets/Img/Menu/Buttons/SettingsButton1.png")),
+            new Texture(Gdx.files.internal("Assets/Img/Menu/Buttons/SettingsButton2.png")),
+            xPosition, yPosition,
+            xSize, ySize,
+            new Function()
+            {
+                public void run()
+                {
+                    BaseGame.setActiveScreen(new SettingsScreen());
+                }
+            });    
+            
+        // Initialize button variables
+        exitButton = new ButtonCreation(); 
+        xPosition = 675;
+        yPosition = 200;
+        xSize = 250;
+        ySize = 100;
+        startButton.CreateButton(mainStage,
+            new Texture(Gdx.files.internal("Assets/Img/Menu/Buttons/ExitButton1.png")),
+            new Texture(Gdx.files.internal("Assets/Img/Menu/Buttons/ExitButton2.png")),
+            xPosition, yPosition,
+            xSize, ySize,
+            new Function()
+            {
+                public void run()
+                {
+                    song.stop();
+                    Gdx.app.exit();
+                }
+            });        
     }
-    
-    
 }
