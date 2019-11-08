@@ -14,8 +14,7 @@ public class SettingsScreen extends BaseScreen
  
     public void update (float dt)
     {
-     EscCheck();
-            
+        EscCheck();            
     }
     
      public void EscCheck()
