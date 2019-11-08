@@ -70,7 +70,7 @@ public class MenuScreen extends BaseScreen
         if(isPlaying == false)
         {            
             song.stop();
-            song.setVolume(0.40f);
+            song.setVolume(0.30f);
             song.play();
             song.setLooping(true);
         }
