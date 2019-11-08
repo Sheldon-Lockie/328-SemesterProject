@@ -9,6 +9,9 @@ public class ArcherTower extends BaseActor
         super(x,y,s);
         loadTexture("Assets/Img/Towers/ArcherTower.png");
         centerAtPosition(GameScreen.MouseX,GameScreen.MouseY);
+        setSize(80,80);
+        setBoundaryPolygon(4);
+        
     }
     
     
