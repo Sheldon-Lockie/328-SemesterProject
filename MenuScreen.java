@@ -27,9 +27,8 @@ public class MenuScreen extends BaseScreen
     private BaseActor gameTitle;
     private BaseActor swordTitle;
     
-    // Song variables
-    private static Music song;
-    private boolean isPlaying;
+    // Game Manager variable
+    private GameManager manager;
     
     public void initialize()
     {
@@ -59,21 +58,21 @@ public class MenuScreen extends BaseScreen
         ViewportHeight = 900;
         ViewportWidth = 1600;
         
-        // Activate song if it isn't already playing
-        if(song == null)
+        // Instantiate game manager
+        manager = new GameManager();
+        
+        // Active menu song if no other songs are playing
+        if(manager.checkSongs() == false)
         {
-            song = Gdx.audio.newMusic(Gdx.files.internal("Assets/Sounds/Songs/MainMenuTheme-Trimmed.mp3"));
+            manager.playMenuMusic();
         }
         
-        isPlaying = song.isPlaying();
-        
-        if(isPlaying == false)
-        {            
-            song.stop();
-            song.setVolume(0.30f);
-            song.play();
-            song.setLooping(true);
-        }
+        // otherwise end all other songs and then play menu music
+        else
+        {
+            manager.endAllSongs();
+            manager.playMenuMusic();
+        }        
     }
  
     public void update (float dt)
@@ -83,7 +82,7 @@ public class MenuScreen extends BaseScreen
     
     private void ButtonCreator()
     {
-        // Initialize button variables
+        // Initialize start button variables
         startButton = new ButtonCreation(); 
         xPosition = 675;
         yPosition = 500;
@@ -98,13 +97,12 @@ public class MenuScreen extends BaseScreen
             {
                 public void run()
                 {
-                    song.stop();
-                    song.dispose();
+                    manager.stopMenuMusic();
                     BaseGame.setActiveScreen(new GameScreen());
                 }
             });    
             
-        // Initialize button variables
+        // Initialize help button variables
         helpButton = new ButtonCreation(); 
         xPosition = 525;
         yPosition = 350;
@@ -123,7 +121,7 @@ public class MenuScreen extends BaseScreen
                 }
             });    
             
-        // Initialize button variables
+        // Initialize settings button variables
         settingsButton = new ButtonCreation(); 
         xPosition = 825;
         yPosition = 350;
@@ -142,7 +140,7 @@ public class MenuScreen extends BaseScreen
                 }
             });    
             
-        // Initialize button variables
+        // Initialize exit button variables
         exitButton = new ButtonCreation(); 
         xPosition = 675;
         yPosition = 200;
@@ -157,8 +155,7 @@ public class MenuScreen extends BaseScreen
             {
                 public void run()
                 {
-                    song.stop();
-                    song.dispose();
+                    manager.stopMenuMusic();
                     Gdx.app.exit();
                 }
             });        
