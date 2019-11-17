@@ -124,8 +124,8 @@ public class GameManager
     // check to see if any songs are playing
     public static boolean checkSongs()
     {
-        // if any song is playing return true
-        if((menuSong.isPlaying()) || (levelSong1.isPlaying()))
+        // if level song is playing return true
+        if(levelSong1.isPlaying())
         {
             return true;
         }

@@ -28,7 +28,10 @@ public class MenuScreen extends BaseScreen
     private BaseActor swordTitle;
     
     // Game Manager variable
-    private GameManager manager;
+    private static GameManager manager;
+    
+    // Sword cursor variable
+    private Pixmap pm; 
     
     public void initialize()
     {
@@ -59,9 +62,12 @@ public class MenuScreen extends BaseScreen
         ViewportWidth = 1600;
         
         // Instantiate game manager
-        manager = new GameManager();
+        if(manager == null)
+        {
+            manager = new GameManager();
+        }
         
-        // Active menu song if no other songs are playing
+        // Activate menu song if no other songs are playing
         if(manager.checkSongs() == false)
         {
             manager.playMenuMusic();
@@ -72,7 +78,12 @@ public class MenuScreen extends BaseScreen
         {
             manager.endAllSongs();
             manager.playMenuMusic();
-        }        
+        }    
+        
+        // Sword cursor intialization
+        pm = new Pixmap(Gdx.files.internal("Assets/Img/Cursors/CursorSword.png"));
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+        pm.dispose();
     }
  
     public void update (float dt)
