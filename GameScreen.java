@@ -15,6 +15,9 @@ public class GameScreen extends BaseScreen
     
     public static float MouseX;
     public static float MouseY;
+    
+    
+    /**********************Bools for unit selection*****************************/
     public boolean UnitPickedUp;
     public boolean ArcherTowerPickedUp;    //true whenever an object is picked up, and false once placed in game area
     public boolean Unit2PickedUp;
@@ -36,6 +39,7 @@ public class GameScreen extends BaseScreen
     BaseActor UnitInfoArea; //Bottom of Screen Unit info area
     BaseActor UnitArea;     //Unit buy area (Right of screen)
     BaseActor ArcherTowerMouse;
+    /********** Selectively updated positions for each type of unit**********/
     BaseActor Unit2Mouse;
     BaseActor Unit3Mouse;
     BaseActor Unit4Mouse;
@@ -49,12 +53,39 @@ public class GameScreen extends BaseScreen
     BaseActor Unit12Mouse;
     BaseActor Unit13Mouse;
     BaseActor Unit14Mouse;
-    
+    /**********************************************************************/
     public void initialize()
     {
+        setBooleans();      //sets any bools that need to be set on start
+        InitUIElements();   //adds elements that are the background, e.x. Background of units/unit info/map img
+        InitButtons();      //creates all the initial buttons that are needed (help btn, unit selection btn)
         
-        UnitPickedUp =  false;
+       
         /*******************************************************************/
+        /*****************Sets Mouse Cursor*********************************/
+        
+        Pixmap pm = new Pixmap(Gdx.files.internal("Assets/Img/Cursors/CursorSword.png"));
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+        pm.dispose();
+        
+                
+    }
+ 
+    public void update (float dt)
+    {
+        PickAndPlaceManager();  // handles picking up unit from buy area + placing it back down (Doesn't create btn for unit info yet)
+        EscCheck(); //Checks if esc key has been hit, if hit returns to mainmenu (Eventually Level Selector)
+       
+       
+    
+    }
+    public void setBooleans()
+    {
+        UnitPickedUp =  false;
+    }
+    public void InitUIElements()
+    {
+         /*******************************************************************/
         /**************** Setting up UI Elements ***************************/
         GameArea = new BaseActor(0,161,mainStage);
         GameArea.loadTexture("Assets/Img/PlaceHolders/GameAreaPlaceHolder.png");
@@ -63,12 +94,9 @@ public class GameScreen extends BaseScreen
         UnitArea = new BaseActor(1350,0,mainStage);
         UnitArea.loadTexture("Assets/Img/PlaceHolders/UnitsPlaceHolder.png");
       
-        /*******************************************************************/
-        /*****************Sets Mouse Cursor*********************************/
-        
-        Pixmap pm = new Pixmap(Gdx.files.internal("Assets/Img/Cursors/CursorSword.png"));
-        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
-        pm.dispose();
+    }
+    public void InitButtons()
+    {
         /*******************************************************************/
         ButtonCreation HelpButton =  new ButtonCreation();
         ButtonCreation ArcherTowerBtn =  new ButtonCreation();
@@ -117,7 +145,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit3 button was clicked",null);
                 UnitPickedUp = true;
-                Unit3PickedUp = true;
+                Unit3PickedUp = true;                
                 Unit3Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit3Mouse.loadTexture("Assets/Img/Towers/Unit3.png");
                 Unit3Mouse.setSize(80,80);
@@ -129,7 +157,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit4 button was clicked",null);
                 UnitPickedUp = true;
-                Unit4PickedUp = true;
+                Unit4PickedUp = true;                
                 Unit4Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit4Mouse.loadTexture("Assets/Img/Towers/Unit4.png");
                 Unit4Mouse.setSize(80,80);
@@ -141,7 +169,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit5 button was clicked",null);
                 UnitPickedUp = true;
-                Unit5PickedUp = true;
+                Unit5PickedUp = true;                
                 Unit5Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit5Mouse.loadTexture("Assets/Img/Towers/Unit5.png");
                 Unit5Mouse.setSize(80,80);
@@ -153,7 +181,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit6 button was clicked",null);
                 UnitPickedUp = true;
-                Unit6PickedUp = true;
+                Unit6PickedUp = true;                
                 Unit6Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit6Mouse.loadTexture("Assets/Img/Towers/Unit6.png");
                 Unit6Mouse.setSize(80,80);
@@ -165,7 +193,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit7 button was clicked",null);
                 UnitPickedUp = true;
-                Unit7PickedUp = true;
+                Unit7PickedUp = true;                
                 Unit7Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit7Mouse.loadTexture("Assets/Img/Towers/Unit7.png");
                 Unit7Mouse.setSize(80,80);
@@ -177,7 +205,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit8 button was clicked",null);
                 UnitPickedUp = true;
-                Unit8PickedUp = true;
+                Unit8PickedUp = true;                
                 Unit8Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit8Mouse.loadTexture("Assets/Img/Towers/Unit8.png");
                 Unit8Mouse.setSize(80,80);
@@ -189,7 +217,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit9 button was clicked",null);
                 UnitPickedUp = true;
-                Unit9PickedUp = true;
+                Unit9PickedUp = true;    
                 Unit9Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit9Mouse.loadTexture("Assets/Img/Towers/Unit9.png");
                 Unit9Mouse.setSize(80,80);
@@ -201,7 +229,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit10 button was clicked",null);
                 UnitPickedUp = true;
-                Unit10PickedUp = true;
+                Unit10PickedUp = true;                
                 Unit10Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit10Mouse.loadTexture("Assets/Img/Towers/Unit10.png");
                 Unit10Mouse.setSize(80,80);
@@ -213,7 +241,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit11 button was clicked",null);
                 UnitPickedUp = true;
-                Unit11PickedUp = true;
+                Unit11PickedUp = true;               
                 Unit11Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit11Mouse.loadTexture("Assets/Img/Towers/Unit11.png");
                 Unit11Mouse.setSize(80,80);
@@ -225,7 +253,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit12 button was clicked",null);
                 UnitPickedUp = true;
-                Unit12PickedUp = true;
+                Unit12PickedUp = true;                
                 Unit12Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit12Mouse.loadTexture("Assets/Img/Towers/Unit12.png");
                 Unit12Mouse.setSize(80,80);
@@ -237,7 +265,7 @@ public class GameScreen extends BaseScreen
             {
                 Gdx.app.log("Unit13 button was clicked",null);
                 UnitPickedUp = true;
-                Unit13PickedUp = true;
+                Unit13PickedUp = true;                
                 Unit13Mouse = new BaseActor(MouseX,MouseY,mainStage);
                 Unit13Mouse.loadTexture("Assets/Img/Towers/Unit13.png");
                 Unit13Mouse.setSize(80,80);
@@ -262,13 +290,11 @@ public class GameScreen extends BaseScreen
                 Gdx.app.log("Help button was clicked",null);
             }
         });
-                
+        
+        
     }
- 
-    public void update (float dt)
+    public void PickAndPlaceManager()
     {
-       
-        /*Slows down amount of polling, only updates when object is picked up */
         if (UnitPickedUp)
         {
             MouseX = Gdx.input.getX();
@@ -449,10 +475,6 @@ public class GameScreen extends BaseScreen
             //Gdx.app.log("X is",Float.toString(MouseX));
             //Gdx.app.log("Y is",Float.toString(MouseY));
         }
-        EscCheck(); //Checks if esc key has been hit, if hit returns to mainmenu (Eventually Level Selector)
-       
-       
-    
     }
     /** Check for overlap when placing a new unit, false means cant be placed, true means can be placed **/
     public boolean CheckTowerPlaceMentOverlap(BaseActor ObjectBeingPlaced)
