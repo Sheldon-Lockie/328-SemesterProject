@@ -93,7 +93,9 @@ public class GameScreen extends BaseScreen
         UnitInfoArea.loadTexture("Assets/Img/PlaceHolders/UnitInfoPlaceHolder.png");
         UnitArea = new BaseActor(1350,0,mainStage);
         UnitArea.loadTexture("Assets/Img/PlaceHolders/UnitsPlaceHolder.png");
-      
+        new Wizard(15,600,mainStage);
+        new Goblin(15,400,mainStage);
+        new Player(15,200,mainStage);
     }
     public void InitButtons()
     {
