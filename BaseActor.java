@@ -518,8 +518,8 @@ public class BaseActor extends Group
             setX(0);
         if (getX() + getWidth() > worldBounds.width)    
             setX(worldBounds.width - getWidth());
-        if (getY() < 0)
-            setY(150);
+        if (getY() < 161)
+            setY(161);
         if (getY() + getHeight() > worldBounds.height)
             setY(worldBounds.height - getHeight());
     }

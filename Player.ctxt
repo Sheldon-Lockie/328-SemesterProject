@@ -2,4 +2,8 @@
 comment0.target=Player
 comment1.params=x\ y\ s
 comment1.target=Player(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
-numComments=2
+comment2.params=dt
+comment2.target=void\ act(float)
+comment3.params=
+comment3.target=float\ getFacingAngle()
+numComments=4
