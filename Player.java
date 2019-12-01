@@ -26,6 +26,8 @@ public class Player extends BaseActor
         
         setName("hero");
         
+        setSize(20, 68);
+        
         frameDuration = 0.2f;
         
         String[] northFiles = {"Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeftBase.png",
@@ -33,10 +35,10 @@ public class Player extends BaseActor
                 "Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeft2.png",
                 "Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeft3.png"};
         north = loadAnimationFromFiles(northFiles, frameDuration, true);
-        String[] southFiles = {"Assets/Img/Player/RightAnimations/Walking/PlayerWalkRightBase.png",
-                "Assets/Img/Player/RightAnimations/Walking/PlayerWalkRight1.png",
-                "Assets/Img/Player/RightAnimations/Walking/PlayerWalkRight2.png",
-                "Assets/Img/Player/RightAnimations/Walking/PlayerWalkRight3.png"};
+        String[] southFiles = {"Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeftBase.png",
+                "Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeft1.png",
+                "Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeft2.png",
+                "Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeft3.png"};
         south = loadAnimationFromFiles(southFiles, frameDuration, true);
         String[] eastFiles = {"Assets/Img/Player/RightAnimations/Walking/PlayerWalkRightBase.png",
                 "Assets/Img/Player/RightAnimations/Walking/PlayerWalkRight1.png",
@@ -62,6 +64,8 @@ public class Player extends BaseActor
         setAcceleration(200);
         setMaxSpeed(200);
         setDeceleration(700);
+        
+        setSize(80, 91);
     }
     
     public void act(float dt)
@@ -81,11 +85,20 @@ public class Player extends BaseActor
             // set direction animation
             float angle = getMotionAngle();
             
-            // set north movement
-            if (angle >= 45 && angle <= 135)
+            // set north east (right)
+            if (angle >= 45 && angle < 90)
+            {
+                facingAngle = 90;
+                setAnimation(east);
+                setSize(80, 91);
+            }
+            
+            // set north west (left)
+            if (angle >= 90 && angle <= 135)
             {
                 facingAngle = 90;
                 setAnimation(north);
+                setSize(80, 91);
             }
             
             // set west movement
@@ -93,13 +106,24 @@ public class Player extends BaseActor
             {
                 facingAngle = 180;
                 setAnimation(west);
+                setSize(80, 91);
             }
             
-            // set south movement
-            else if (angle >= 225 && angle <= 315)
+            // set south west movement
+            else if (angle >= 225 && angle <= 270)
             {
                 facingAngle = 270;
                 setAnimation(south);
+                setSize(80, 91);
+            }
+            
+            
+            // set south east movement (right)
+            else if (angle > 270 && angle <= 315)
+            {
+                facingAngle = 270;
+                setAnimation(east);
+                setSize(80, 91);
             }
             
             // set east movement
@@ -107,6 +131,7 @@ public class Player extends BaseActor
             {
                 facingAngle = 0;
                 setAnimation(east);
+                setSize(80, 91);
             }
         }
         
