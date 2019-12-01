@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=RangeRectangle
+comment1.params=x\ y\ s\ SizeX\ SizeY
+comment1.target=RangeRectangle(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage,\ float,\ float)
+comment2.params=s
+comment2.target=void\ CheckForRange(com.badlogic.gdx.scenes.scene2d.Stage)
+numComments=3

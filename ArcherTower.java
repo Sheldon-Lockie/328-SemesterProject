@@ -11,8 +11,17 @@ public class ArcherTower extends BaseActor
         centerAtPosition(GameScreen.MouseX,GameScreen.MouseY);
         setSize(80,80);
         setBoundaryPolygon(4);
+        CreateRangeRectangle(x,y,s);
+        
+        
         
     }
     
     
+    void CreateRangeRectangle(float CenterX ,float CenterY,Stage s)
+    {
+        new RangeRectangle(CenterX,CenterY,s,120,120);
+    }
+    
 }
+    
