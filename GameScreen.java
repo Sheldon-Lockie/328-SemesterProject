@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.audio.Music;
 
 
 
@@ -54,6 +55,20 @@ public class GameScreen extends BaseScreen
     BaseActor Unit13Mouse;
     BaseActor Unit14Mouse;
     /**********************************************************************/
+    
+    // Game Manager
+    private static GameManager manager;
+    
+    // extras
+    private boolean lock1;
+    private float timer1;
+    
+    private int numOfEnemies;
+    private boolean spawnLock;
+    private int spawnDelay;
+    private float spawnTimer;
+    private int counter;
+    
     public void initialize()
     {
         BaseActor.setWorldBounds(1350, 900);
@@ -69,6 +84,39 @@ public class GameScreen extends BaseScreen
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
         pm.dispose();
         
+        
+        // Initialize music
+        // Instantiate game manager
+        if(manager == null)
+        {
+            manager = new GameManager();
+        }
+        
+        // Activate menu song if no other songs are playing
+        if(manager.checkSongs() == false)
+        {
+            manager.playLevelMusic();
+        }
+        
+        // otherwise end all other songs and then play menu music
+        else
+        {
+            manager.endAllSongs();
+            manager.playLevelMusic();
+        }   
+        
+        // extras
+        lock1 = false;
+        timer1 = 0.0f;
+        
+        numOfEnemies = 5;
+        
+        // start spawning enemies
+        spawnEnemies();
+        spawnLock = false;
+        spawnTimer = 0.0f;
+        spawnDelay = 15;
+        counter = 0;
                 
     }
  
@@ -76,8 +124,13 @@ public class GameScreen extends BaseScreen
     {
         PickAndPlaceManager();  // handles picking up unit from buy area + placing it back down (Doesn't create btn for unit info yet)
         EscCheck(); //Checks if esc key has been hit, if hit returns to mainmenu (Eventually Level Selector)
-       
-       
+        spawnEnemies();
+        // check any timers
+        if(lock1 == true)
+        {
+            timer1 += dt;
+        }
+        
     
     }
     public void setBooleans()
@@ -94,8 +147,8 @@ public class GameScreen extends BaseScreen
         UnitInfoArea.loadTexture("Assets/Img/PlaceHolders/UnitInfoPlaceHolder.png");
         UnitArea = new BaseActor(1350,0,mainStage);
         UnitArea.loadTexture("Assets/Img/PlaceHolders/UnitsPlaceHolder.png");
-        new Wizard(15,600,mainStage);
-        new Goblin(15,400,mainStage);
+        //new Wizard(15,600,mainStage);
+        //new Goblin(15,400,mainStage);
         new Player(15,200,mainStage);
     }
     public void InitButtons()
@@ -617,6 +670,34 @@ public class GameScreen extends BaseScreen
     {
         TowerType.centerAtPosition(MouseX,MouseY);
     }
+    
+    // method to spawn enemies
+    public void spawnEnemies()
+    {
+        //int counter = 0; 
+        lock1 = true;
+        
+        // spawns this many enemies
+        if(!spawnLock)
+        {   
+            if(timer1 >= 0.75f)
+            {
+                new Wizard(15, 500, mainStage);
+                timer1 = 0.0f;
+                counter++;
+            }
+            
+            if(counter > numOfEnemies)
+            {
+                spawnLock = true;
+                // increase enemies for next wave
+                spawnDelay += ((int)(spawnDelay / 4) + spawnDelay);
+                numOfEnemies += ((int)(numOfEnemies / 2) + numOfEnemies);
+                counter = 0;
+            }
+        }
+    }
+    
     public void EscCheck()
     {
         if (Gdx.input.isKeyPressed(Keys.ESCAPE))
@@ -625,4 +706,6 @@ public class GameScreen extends BaseScreen
             BaseGame.setActiveScreen( new MenuScreen());
         }
     }
+    
+    
 }

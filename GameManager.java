@@ -27,8 +27,8 @@ public class GameManager
         menuSong = Gdx.audio.newMusic(Gdx.files.internal(
             "Assets/Sounds/Songs/MainMenuTheme-Trimmed.mp3")); // The menu song
         levelSong1 = Gdx.audio.newMusic(Gdx.files.internal(
-            "Assets/Sounds/Songs/MainMenuTheme-Trimmed.mp3")); // the first level song
-        songVolume = 0.30f; // song volume is set to 50%
+            "Assets/Sounds/Songs/GameSong1.mp3")); // the first level song
+        songVolume = 0.05f; // song volume is set to 5%
         soundEffectVolume = 0.30f; // volume is set to 50%
         difficulty = 2; // difficulty is challenging
         heroAttack = 1; // attack mechanism is manual    
