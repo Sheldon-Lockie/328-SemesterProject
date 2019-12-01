@@ -56,6 +56,7 @@ public class GameScreen extends BaseScreen
     /**********************************************************************/
     public void initialize()
     {
+        BaseActor.setWorldBounds(1350, 900);
         setBooleans();      //sets any bools that need to be set on start
         InitUIElements();   //adds elements that are the background, e.x. Background of units/unit info/map img
         InitButtons();      //creates all the initial buttons that are needed (help btn, unit selection btn)
@@ -88,7 +89,7 @@ public class GameScreen extends BaseScreen
          /*******************************************************************/
         /**************** Setting up UI Elements ***************************/
         GameArea = new BaseActor(0,161,mainStage);
-        GameArea.loadTexture("Assets/Img/PlaceHolders/GameAreaPlaceHolder.png");
+        GameArea.loadTexture("Assets/Img/Level/LevelBackground.png");
         UnitInfoArea =  new BaseActor(0,0,mainStage);
         UnitInfoArea.loadTexture("Assets/Img/PlaceHolders/UnitInfoPlaceHolder.png");
         UnitArea = new BaseActor(1350,0,mainStage);
