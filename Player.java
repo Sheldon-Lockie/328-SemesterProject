@@ -19,6 +19,9 @@ public class Player extends BaseActor
     private float frameDuration;
     private boolean noMovementCheck;
     
+    private float Timer;
+    private boolean heroCanAttack;
+    private float attackDelay;
     
     public Player (float x, float y, Stage s)
     {
@@ -60,6 +63,11 @@ public class Player extends BaseActor
         
         // set after animation established
         setBoundaryPolygon(8);
+        
+        // other variables
+        Timer = 0.0f;
+        heroCanAttack = true;
+        attackDelay = 0.5f;
 
         setAcceleration(200);
         setMaxSpeed(200);
@@ -149,11 +157,38 @@ public class Player extends BaseActor
                 accelerateAtAngle(270);
         }
 
+        // check for attack
+        if(Timer >= attackDelay)
+        {
+            this.heroCanAttack = true;
+        }
+        
         // alignCamera();
         boundToWorld();
         applyPhysics(dt);
     }
 
+    // attack enemies within range
+    public void attack(Stage s)
+    {
+       for (BaseActor WizardHandler : BaseActor.getList(s,"Wizard"))
+       {
+           if (WizardHandler.overlaps(this))
+           {
+               
+               if (this.heroCanAttack)
+               {
+                   this.Timer  = 0;
+                   Gdx.app.log("Character attacked",null);
+                   this.heroCanAttack = false;
+                   //WizardHandler.decreaseHealth(50);
+               }
+               
+           }
+           
+       }
+    }
+    
     public float getFacingAngle()
     {
         return facingAngle;
