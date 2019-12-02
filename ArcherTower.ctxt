@@ -2,6 +2,8 @@
 comment0.target=ArcherTower
 comment1.params=x\ y\ s
 comment1.target=ArcherTower(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
-comment2.params=CenterX\ CenterY\ s
-comment2.target=void\ CreateRangeRectangle(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
-numComments=3
+comment2.params=dt
+comment2.target=void\ Act(float)
+comment3.params=CenterX\ CenterY\ s
+comment3.target=void\ CreateRangeRectangle(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
+numComments=4
