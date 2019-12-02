@@ -4,4 +4,6 @@ comment1.params=x\ y\ s
 comment1.target=Wizard(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
 comment2.params=dt
 comment2.target=void\ act(float)
-numComments=3
+comment3.params=damage
+comment3.target=void\ decreaseHealth(int)
+numComments=4
