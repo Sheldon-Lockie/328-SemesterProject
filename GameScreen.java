@@ -131,6 +131,16 @@ public class GameScreen extends BaseScreen
             timer1 += dt;
         }
         
+        if(spawnLock == true)
+        {
+            spawnTimer += dt;
+            
+            if(spawnTimer >= spawnDelay)
+            {
+                spawnLock = false;
+                spawnTimer = 0.0f;
+            }
+        }
     
     }
     public void setBooleans()
@@ -680,7 +690,7 @@ public class GameScreen extends BaseScreen
         // spawns this many enemies
         if(!spawnLock)
         {   
-            if(timer1 >= 0.75f)
+            if(timer1 >= 0.30f)
             {
                 new Wizard(15, 500, mainStage);
                 timer1 = 0.0f;
@@ -691,8 +701,8 @@ public class GameScreen extends BaseScreen
             {
                 spawnLock = true;
                 // increase enemies for next wave
-                spawnDelay += ((int)(spawnDelay / 4) + spawnDelay);
-                numOfEnemies += ((int)(numOfEnemies / 2) + numOfEnemies);
+                spawnDelay += ((int)(spawnDelay / 8));
+                numOfEnemies += ((int)(numOfEnemies / 2));
                 counter = 0;
             }
         }
