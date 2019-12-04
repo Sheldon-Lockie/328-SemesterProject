@@ -24,8 +24,8 @@ public class Arrow extends BaseActor
         this.Timer = 0;
         this.AngleToTarget = getAngle(OriginX,OriginY,TargetX,TargetY);
         //Gdx.app.log("The angle to the target is",Double.toString(this.AngleToTarget));
-        setAcceleration(500);
-        setMaxSpeed(500);
+        setAcceleration(1000);
+        setMaxSpeed(900);
         boundToWorld();
       
     }
@@ -37,9 +37,11 @@ public class Arrow extends BaseActor
         this.accelerateAtAngle(this.AngleToTarget);
         applyPhysics(dt);
         this.Timer+= dt;
-        if (this.Timer >= 0)
+        if (this.Timer >= TimeToDelete)
         {
+            
             this.remove();
+            
         }
         
     }
