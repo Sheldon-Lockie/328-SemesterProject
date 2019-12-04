@@ -33,9 +33,36 @@ public class AttackHelper
             if ( theClass.isInstance( a ) )
                 list.add( (Wizard)a );
         }
-
+        
         return list;
     }
+    
+    // returns whether the wave has ended or not
+    public static boolean waveCheck(Stage s)
+    {
+        boolean status = false; 
+        
+        ArrayList<Wizard> wizardList = new ArrayList<Wizard>();
+        wizardList = getListWizard(s, "Wizard");
+        //System.out.print(getListWizard(s, "Wizard").size());
+      
+        // checks to see if any wizards exist  
+        if(getListWizard(s, "Wizard").size() != 0)
+        {
+            status = false;  // wave isn't over
+            System.out.print("Still wizards on map\n");
+            return status;
+        }
+        
+        // otherwise it indicates that no more players are left on the map
+        else
+        {
+            status = true;
+            System.out.print("No characters on the map\n");
+            return status;
+        }
+    }
+        
 }
     
     
