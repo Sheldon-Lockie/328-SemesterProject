@@ -85,6 +85,7 @@ public class Player extends BaseActor
         {
             setAnimation(west);
             setAnimationPaused(true);
+            setSize(80, 91);
         }
         
         else
