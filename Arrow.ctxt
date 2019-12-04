@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Arrow
+comment1.params=OriginX\ OriginY\ s\ TargetX\ TargetY
+comment1.target=Arrow(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage,\ float,\ float)
+comment2.params=dt
+comment2.target=void\ act(float)
+comment3.params=originX\ originY\ TargetX\ TargetY
+comment3.target=float\ getAngle(float,\ float,\ float,\ float)
+numComments=4
