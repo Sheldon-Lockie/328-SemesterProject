@@ -7,13 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class RangeRectangle extends BaseActor
 {
-    public float TimeBetweenShots = 1; //in seconds
+    public float TimeBetweenShots = .3f; //in seconds
     BaseActor RangeRectangle = this;
     public float Timer;
     public boolean TowerCanShoot;
     Stage MainStage;
     private AttackHelper attackHelper;
-    
+    float X;
+    float Y;
     public RangeRectangle (float x, float y, Stage s,float SizeX,float SizeY)
     {
         super(x,y,s);
@@ -21,11 +22,15 @@ public class RangeRectangle extends BaseActor
         loadTexture("Assets/Img/Towers/Unit14.png");
         setOpacity(0);
         setSize(SizeX,SizeY);
-        centerAtPosition(GameScreen.MouseX,GameScreen.MouseY);
+        this.X =  GameScreen.MouseX;
+        this.Y = GameScreen.MouseY;
+        centerAtPosition(X,Y);
+       
         setBoundaryPolygon(4);
         CheckForRange(s);
         this.TowerCanShoot = true;
         this.Timer = 0;
+        
         
         attackHelper = new AttackHelper();
         
@@ -52,9 +57,11 @@ public class RangeRectangle extends BaseActor
                if (this.TowerCanShoot)
                {
                    this.Timer  = 0;
-                   Gdx.app.log("An Archer Tower Shot",null);
+                   //Gdx.app.log("An Archer Tower Shot",null);
                    this.TowerCanShoot = false;
-                   WizardHandler.decreaseHealth(50);
+                   new Arrow(this.X,this.Y,s,WizardHandler.getX(),WizardHandler.getY());
+                   
+                   WizardHandler.decreaseHealth(20);
                }             
            }          
        }
