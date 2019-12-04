@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.math.MathUtils;
 
 
 
@@ -70,6 +71,7 @@ public class GameScreen extends BaseScreen
     private float spawnTimer;
     private int counter;
     private boolean endOfWave;
+    private int waveCounter;
     
     // helper
     private AttackHelper attackHelper;
@@ -123,6 +125,7 @@ public class GameScreen extends BaseScreen
         spawnDelay = 5; // 5 seconds after each wave
         counter = 0;
         endOfWave = false;
+        waveCounter = 1;
         
         // helpers
         attackHelper = new AttackHelper();
@@ -154,6 +157,7 @@ public class GameScreen extends BaseScreen
                     spawnLock = false;
                     spawnTimer = 0.0f;
                     endOfWave = false;
+                    waveCounter++;
                 }
             }
         }
@@ -727,6 +731,24 @@ public class GameScreen extends BaseScreen
                 numOfEnemies += ((int)(numOfEnemies / 2));
                 counter = 0;
             }
+        }
+    }
+    
+    public int spawnSelector()
+    {
+        int spawnChoice = 0;
+        
+        spawnChoice = MathUtils.random(1, 4); // choose spawn between 1 and 4 (CHANGE LATER)
+        
+        if(spawnChoice >= 1 && spawnChoice <= 4)
+        {
+            return spawnChoice;
+        }
+     
+        else
+        {
+            spawnChoice = 1;
+            return spawnChoice;
         }
     }
          
