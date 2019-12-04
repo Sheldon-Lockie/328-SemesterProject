@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=AttackHelper
+comment1.params=
+comment1.target=AttackHelper()
+comment2.params=stage\ className
+comment2.target=java.util.ArrayList\ getListWizard(com.badlogic.gdx.scenes.scene2d.Stage,\ java.lang.String)
+numComments=3
