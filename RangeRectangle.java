@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class RangeRectangle extends BaseActor
 {
-    public float TimeBetweenShots = .3f; //in seconds
+    public float TimeBetweenShots = .75f; //in seconds
     BaseActor RangeRectangle = this;
     public float Timer;
     public boolean TowerCanShoot;
