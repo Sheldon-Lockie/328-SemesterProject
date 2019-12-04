@@ -1,5 +1,8 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
+import java.util.ArrayList;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
 public class RangeRectangle extends BaseActor
@@ -9,6 +12,8 @@ public class RangeRectangle extends BaseActor
     public float Timer;
     public boolean TowerCanShoot;
     Stage MainStage;
+    private AttackHelper attackHelper;
+    
     public RangeRectangle (float x, float y, Stage s,float SizeX,float SizeY)
     {
         super(x,y,s);
@@ -22,6 +27,7 @@ public class RangeRectangle extends BaseActor
         this.TowerCanShoot = true;
         this.Timer = 0;
         
+        attackHelper = new AttackHelper();
         
     }
     public void act(float dt)
@@ -36,26 +42,22 @@ public class RangeRectangle extends BaseActor
         
         
     }
+       
     public void CheckForRange(Stage s)
     {
-       for (BaseActor WizardHandler : BaseActor.getList(s,"Wizard"))
+       for (Wizard WizardHandler : attackHelper.getListWizard(s,"Wizard"))
        {
            if (WizardHandler.overlaps(RangeRectangle))
-           {
-               
+           {          
                if (this.TowerCanShoot)
                {
                    this.Timer  = 0;
                    Gdx.app.log("An Archer Tower Shot",null);
                    this.TowerCanShoot = false;
                    WizardHandler.decreaseHealth(50);
-               }
-               
-           }
-           
+               }             
+           }          
        }
-       
-        
-    }
+    }   
 }
     
