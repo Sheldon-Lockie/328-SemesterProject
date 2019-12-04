@@ -10,4 +10,6 @@ comment4.params=
 comment4.target=void\ followPath()
 comment5.params=damage
 comment5.target=void\ decreaseHealth(int)
-numComments=6
+comment6.params=
+comment6.target=void\ despawn()
+numComments=7

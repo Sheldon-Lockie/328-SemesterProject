@@ -63,6 +63,9 @@ public class GameScreen extends BaseScreen
     // extras
     private boolean lock1;
     private float timer1;
+    private boolean gameOver;
+    private boolean exitLock;
+    private float exitTimer;
     
     // spawn variables
     private int numOfEnemies;
@@ -72,9 +75,15 @@ public class GameScreen extends BaseScreen
     private int counter;
     private boolean endOfWave;
     private int waveCounter;
+    private int spawn1Selection;
+    private int spawn2Selection;
+    private int spawn3Selection;
     
     // helper
     private AttackHelper attackHelper;
+    
+    // ui stuff
+    private CastleHealth castle;
     
     public void initialize()
     {
@@ -115,58 +124,103 @@ public class GameScreen extends BaseScreen
         // extras
         lock1 = false;
         timer1 = 0.0f;
+        gameOver = false;
+        exitLock = false;
+        exitTimer = 0.0f;
         
         numOfEnemies = 5;
         
         // start spawning enemies
         spawnEnemies();
-        spawnLock = false;
+        spawnLock = true;
         spawnTimer = 0.0f;
         spawnDelay = 5; // 5 seconds after each wave
         counter = 0;
         endOfWave = false;
-        waveCounter = 1;
+        waveCounter = 0;
+        spawn1Selection = 1;
+        spawn2Selection = 1;
+        spawn3Selection = 1;
         
         // helpers
         attackHelper = new AttackHelper();
+        
+        // ui stuff
+        castle = new CastleHealth();
                 
     }
  
     public void update (float dt)
     {
-        PickAndPlaceManager();  // handles picking up unit from buy area + placing it back down (Doesn't create btn for unit info yet)
         EscCheck(); //Checks if esc key has been hit, if hit returns to mainmenu (Eventually Level Selector)
-        spawnEnemies(); // will run spawn method each frame
         
-        /*
-         * check any timers
-         */ 
-        if(lock1 == true)
+        // performs the following while the game is running
+        if(!gameOver)
         {
-            timer1 += dt;
-        }
-        
-        if(spawnLock == true)
-        {
-            if(endOfWave == true)
+            PickAndPlaceManager();  // handles picking up unit from buy area + placing it back down (Doesn't create btn for unit info yet)
+            spawnEnemies(); // will run spawn method each frame
+            checkEnemies(); // checks if enemies overlap castle
+            checkGameStatus(); // checks if game is over
+            
+            /*
+             * check any timers
+             */ 
+            if(lock1 == true)
             {
-                spawnTimer += dt;
-                
-                if(spawnTimer >= spawnDelay)
+                timer1 += dt;
+            }
+            
+            if(spawnLock == true)
+            {
+                if(endOfWave == true)
                 {
-                    spawnLock = false;
-                    spawnTimer = 0.0f;
-                    endOfWave = false;
-                    waveCounter++;
+                    spawnTimer += dt;
+                    
+                    if(spawnTimer >= spawnDelay)
+                    {
+                        spawnLock = false;
+                        spawnTimer = 0.0f;
+                        endOfWave = false;
+                        waveCounter++;
+                        spawn1Selection = spawnSelector1();
+                        spawn2Selection = spawnSelector2();
+                        spawn3Selection = spawnSelector3();
+                    }
                 }
             }
         }
-    
+        
+        // game over sequence of actions
+        else if(gameOver == true)
+        {
+            exitTimer += dt;
+            exitToMainMenu();
+        }
     }
+    
+    public void exitToMainMenu()
+    {
+        if(exitLock == false)
+        {
+            exitLock = true;
+            
+            // exit message stuff add
+        }
+            
+            // exits after 5 seconds
+            if(exitTimer >= 5)
+            {
+                manager.endAllSongs();
+                manager.stopLevelMusic();
+                MainGame.setActiveScreen(new MenuScreen());
+            }
+    }
+    
     public void setBooleans()
     {
         UnitPickedUp =  false;
     }
+    
     public void InitUIElements()
     {
          /*******************************************************************/
@@ -177,9 +231,8 @@ public class GameScreen extends BaseScreen
         UnitInfoArea.loadTexture("Assets/Img/PlaceHolders/UnitInfoPlaceHolder.png");
         UnitArea = new BaseActor(1350,0,mainStage);
         UnitArea.loadTexture("Assets/Img/PlaceHolders/UnitsPlaceHolder.png");
-        //new Wizard(15,600,mainStage);
-        //new Goblin(15,400,mainStage);
-        new Player(1000, 550, mainStage);
+        
+        new Player(1100, 490, mainStage); // spawn player in
     }
     public void InitButtons()
     {
@@ -204,7 +257,7 @@ public class GameScreen extends BaseScreen
         ArcherTowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit1_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit1_Highlighted.png")),1360,737,110,110, new Function(){
             public void run()
             {
-                Gdx.app.log("Unit1 button was clicked",null);
+                //Gdx.app.log("Unit1 button was clicked",null);
                 UnitPickedUp = true;
                 ArcherTowerPickedUp = true;
                 ArcherTowerMouse = new BaseActor(MouseX,MouseY,mainStage);
@@ -705,7 +758,7 @@ public class GameScreen extends BaseScreen
     public void spawnEnemies()
     {
         lock1 = true;
-        
+
         // checks to see if wave has ended once all enemies spawn in
         if(spawnLock)
         {
@@ -714,31 +767,80 @@ public class GameScreen extends BaseScreen
         
         // spawns enemies if not locked
         else if(!spawnLock)
-        {   
-            if(timer1 >= 0.30f)
+        {  
+            // spawns for first 2 waves
+            if(waveCounter < 3)
             {
-                new Wizard(15, 500, mainStage, 4);
-                timer1 = 0.0f;
-                counter++;
+                if(timer1 >= 0.30f)
+                {
+                    new Wizard(15, 500, mainStage, spawn1Selection);
+                    timer1 = 0.0f;
+                    counter++;
+                }
+                
+                // spawned all enemies
+                if(counter > numOfEnemies)
+                {
+                    spawnLock = true;
+                    
+                    // increase enemies for next wave
+                    numOfEnemies += ((int)(numOfEnemies / 2));
+                    counter = 0;
+                }
             }
             
-            // spawned all enemies
-            if(counter > numOfEnemies)
+            // spawns for waves 3 and 4
+            else if(waveCounter > 2 && waveCounter < 5)
             {
-                spawnLock = true;
-                // increase enemies for next wave
-                //spawnDelay += ((int)(spawnDelay / 8));
-                numOfEnemies += ((int)(numOfEnemies / 2));
-                counter = 0;
+                if(timer1 >= 0.30f)
+                {
+                    new Wizard(15, 500, mainStage, spawn1Selection);
+                    new Wizard(350, 880, mainStage, spawn2Selection);
+                    timer1 = 0.0f;
+                    counter++;
+                }
+                
+                // spawned all enemies
+                if(counter > numOfEnemies)
+                {
+                    spawnLock = true;
+                    
+                    // increase enemies for next wave
+                    numOfEnemies += ((int)(numOfEnemies / 2));
+                    counter = 0;
+                }
+            }
+            
+            // spawns for waves after 4
+            else
+            {
+                if(timer1 >= 0.30f)
+                {
+                    new Wizard(15, 500, mainStage, spawn1Selection);
+                    new Wizard(350, 880, mainStage, spawn2Selection);
+                    new Wizard(350, 172, mainStage, spawn3Selection);
+                    timer1 = 0.0f;
+                    counter++;
+                }
+                
+                // spawned all enemies
+                if(counter > numOfEnemies)
+                {
+                    spawnLock = true;
+                    
+                    // increase enemies for next wave
+                    numOfEnemies += ((int)(numOfEnemies / 2));
+                    counter = 0;
+                }
             }
         }
     }
     
-    public int spawnSelector()
+    public int spawnSelector1()
     {
         int spawnChoice = 0;
         
-        spawnChoice = MathUtils.random(1, 4); // choose spawn between 1 and 4 (CHANGE LATER)
+        spawnChoice = MathUtils.random(1, 4); 
         
         if(spawnChoice >= 1 && spawnChoice <= 4)
         {
@@ -751,13 +853,71 @@ public class GameScreen extends BaseScreen
             return spawnChoice;
         }
     }
+    
+    public int spawnSelector2()
+    {
+        int spawnChoice = 0;
+        
+        spawnChoice = MathUtils.random(5, 6); 
+        
+        if(spawnChoice >= 5  && spawnChoice <= 6)
+        {
+            return spawnChoice;
+        }
+     
+        else
+        {
+            spawnChoice = 5;
+            return spawnChoice;
+        }
+    }
+    
+    public int spawnSelector3()
+    {
+        int spawnChoice = 0;
+        
+        spawnChoice = MathUtils.random(7, 8);
+        
+        if(spawnChoice >= 7 && spawnChoice <= 8)
+        {
+            return spawnChoice;
+        }
+     
+        else
+        {
+            spawnChoice = 7;
+            return spawnChoice;
+        }
+    }
+    
+    public void checkEnemies()
+    {
+        for (Wizard WizardHandler : attackHelper.getListWizard(mainStage,"Wizard"))
+       {
+           if (WizardHandler.getX() > 1200)
+           {
+               castle.reduceHealth(20f); // wizards hit for 20 damage
+               WizardHandler.despawn();
+           }
+       }
+    }
          
+    public void checkGameStatus()
+    {
+        if(castle.getHealth() <= 0)
+        {
+            gameOver = true;
+            System.out.print("Health = " + castle.getHealth() + "\n");
+            System.out.print("GAME OVER! Castle health reached 0\n");
+        }
+    }
     
     public void EscCheck()
     {
         if (Gdx.input.isKeyPressed(Keys.ESCAPE))
         {
             //could put a prompt here if we want??
+            manager.stopLevelMusic();
             BaseGame.setActiveScreen( new MenuScreen());
         }
     }

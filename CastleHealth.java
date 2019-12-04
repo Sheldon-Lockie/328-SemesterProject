@@ -2,12 +2,12 @@ import com.badlogic.gdx.Gdx;
 
 public class CastleHealth
 {
-    private float Health;
+    private float health;
+    
     public CastleHealth()
     {
-        Health = 100;
-        
-        
+        System.out.print("Starting Health: 100\n");
+        health = 100;        
     }
     
     
@@ -15,28 +15,35 @@ public class CastleHealth
     /** Removes CastleHealth , reutrns true if dead, false if alive??**/
     public boolean DecreaseCastleHealth(float amount)
     {
-       if (Health - amount <= 0)
+       if (health - amount <= 0)
        {
            return true;
        }
+       
        else
        {
-         Health -= amount;
+         health -= amount;
          return false;
-       }
-       
-        
+       }        
     }
+    
+    // reduce health
+    public void reduceHealth(float damage)
+    {
+        System.out.print("Castle hit for " + damage + " damage. Remaining health: " + (float)(health-damage) + "\n");
+        health -= damage;
+    }
+    
     /** Adds CastleHealth **/
     public float addCastleHealth(float amount)
     {
-        Health += amount;
-        return Health;
+        health += amount;
+        return health;
         
     }
     /** Returns Castle Health **/
     public float getHealth()
     {
-        return Health;
+        return health;
     }
 }

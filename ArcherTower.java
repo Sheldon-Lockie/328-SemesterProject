@@ -23,7 +23,7 @@ public class ArcherTower extends BaseActor
     }
     void CreateRangeRectangle(float CenterX ,float CenterY,Stage s)
     {
-        new RangeRectangle(CenterX,CenterY,s,220,220);
+        new RangeRectangle(CenterX,CenterY,s,300,300);
     }
     
 }
