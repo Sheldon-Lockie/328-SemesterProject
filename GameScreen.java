@@ -63,11 +63,16 @@ public class GameScreen extends BaseScreen
     private boolean lock1;
     private float timer1;
     
+    // spawn variables
     private int numOfEnemies;
     private boolean spawnLock;
     private int spawnDelay;
     private float spawnTimer;
     private int counter;
+    private boolean endOfWave;
+    
+    // helper
+    private AttackHelper attackHelper;
     
     public void initialize()
     {
@@ -115,8 +120,12 @@ public class GameScreen extends BaseScreen
         spawnEnemies();
         spawnLock = false;
         spawnTimer = 0.0f;
-        spawnDelay = 15;
+        spawnDelay = 5; // 5 seconds after each wave
         counter = 0;
+        endOfWave = false;
+        
+        // helpers
+        attackHelper = new AttackHelper();
                 
     }
  
@@ -124,8 +133,11 @@ public class GameScreen extends BaseScreen
     {
         PickAndPlaceManager();  // handles picking up unit from buy area + placing it back down (Doesn't create btn for unit info yet)
         EscCheck(); //Checks if esc key has been hit, if hit returns to mainmenu (Eventually Level Selector)
-        spawnEnemies();
-        // check any timers
+        spawnEnemies(); // will run spawn method each frame
+        
+        /*
+         * check any timers
+         */ 
         if(lock1 == true)
         {
             timer1 += dt;
@@ -133,12 +145,16 @@ public class GameScreen extends BaseScreen
         
         if(spawnLock == true)
         {
-            spawnTimer += dt;
-            
-            if(spawnTimer >= spawnDelay)
+            if(endOfWave == true)
             {
-                spawnLock = false;
-                spawnTimer = 0.0f;
+                spawnTimer += dt;
+                
+                if(spawnTimer >= spawnDelay)
+                {
+                    spawnLock = false;
+                    spawnTimer = 0.0f;
+                    endOfWave = false;
+                }
             }
         }
     
@@ -159,7 +175,7 @@ public class GameScreen extends BaseScreen
         UnitArea.loadTexture("Assets/Img/PlaceHolders/UnitsPlaceHolder.png");
         //new Wizard(15,600,mainStage);
         //new Goblin(15,400,mainStage);
-        new Player(15,200,mainStage);
+        new Player(1000, 550, mainStage);
     }
     public void InitButtons()
     {
@@ -684,29 +700,36 @@ public class GameScreen extends BaseScreen
     // method to spawn enemies
     public void spawnEnemies()
     {
-        //int counter = 0; 
         lock1 = true;
         
-        // spawns this many enemies
-        if(!spawnLock)
+        // checks to see if wave has ended once all enemies spawn in
+        if(spawnLock)
+        {
+            endOfWave = attackHelper.waveCheck(mainStage);
+        }
+        
+        // spawns enemies if not locked
+        else if(!spawnLock)
         {   
             if(timer1 >= 0.30f)
             {
-                new Wizard(15, 500, mainStage);
+                new Wizard(15, 500, mainStage, 4);
                 timer1 = 0.0f;
                 counter++;
             }
             
+            // spawned all enemies
             if(counter > numOfEnemies)
             {
                 spawnLock = true;
                 // increase enemies for next wave
-                spawnDelay += ((int)(spawnDelay / 8));
+                //spawnDelay += ((int)(spawnDelay / 8));
                 numOfEnemies += ((int)(numOfEnemies / 2));
                 counter = 0;
             }
         }
     }
+         
     
     public void EscCheck()
     {

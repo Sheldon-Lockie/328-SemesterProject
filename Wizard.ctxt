@@ -1,9 +1,13 @@
 #BlueJ class context
 comment0.target=Wizard
-comment1.params=x\ y\ s
-comment1.target=Wizard(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
+comment1.params=x\ y\ s\ path
+comment1.target=Wizard(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage,\ int)
 comment2.params=dt
 comment2.target=void\ act(float)
-comment3.params=damage
-comment3.target=void\ decreaseHealth(int)
-numComments=4
+comment3.params=pathChoice
+comment3.target=void\ determinePath(int)
+comment4.params=
+comment4.target=void\ followPath()
+comment5.params=damage
+comment5.target=void\ decreaseHealth(int)
+numComments=6
