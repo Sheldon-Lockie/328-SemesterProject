@@ -83,6 +83,7 @@ public class Player extends BaseActor
         // pause animation when character not moving
         if(getSpeed() == 0 )
         {
+            setAnimation(west);
             setAnimationPaused(true);
         }
         
@@ -154,7 +155,7 @@ public class Player extends BaseActor
             if (Gdx.input.isKeyPressed(Keys.UP)) 
                 accelerateAtAngle(90);
             if (Gdx.input.isKeyPressed(Keys.DOWN)) 
-                accelerateAtAngle(270);
+                accelerateAtAngle(270);            
         }
 
         // check for attack

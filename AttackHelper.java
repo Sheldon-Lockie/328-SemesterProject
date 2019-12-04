@@ -50,7 +50,7 @@ public class AttackHelper
         if(getListWizard(s, "Wizard").size() != 0)
         {
             status = false;  // wave isn't over
-            System.out.print("Still wizards on map\n");
+            //System.out.print("Still wizards on map\n");
             return status;
         }
         
@@ -58,7 +58,7 @@ public class AttackHelper
         else
         {
             status = true;
-            System.out.print("No characters on the map\n");
+            //System.out.print("No characters on the map\n");
             return status;
         }
     }
