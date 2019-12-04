@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.target=Currency
+comment1.params=
+comment1.target=Currency()
+comment2.params=amount
+comment2.target=float\ removeBalance(float)
+comment2.text=Removes\ Currency\ To\ Player's\ Balance\ *
+comment3.params=amount
+comment3.target=float\ addBalance(float)
+comment3.text=Adds\ Currency\ To\ Player's\ Balance\ *
+comment4.params=
+comment4.target=float\ getBalance()
+comment4.text=Returns\ Player's\ current\ balance\ *
+numComments=5
