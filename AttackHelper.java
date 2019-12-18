@@ -37,6 +37,26 @@ public class AttackHelper
         return list;
     }
     
+    // retrieves a list of all archer tower actors to reference their methods
+    public static ArrayList<ArcherTower> getListArcherTower(Stage stage, String className)
+    {
+        ArrayList<ArcherTower> list = new ArrayList<ArcherTower>();
+
+        Class theClass = null;
+        try
+        {  theClass = Class.forName(className);  }
+        catch (Exception error)
+        {  error.printStackTrace();  }
+
+        for (Actor a : stage.getActors())
+        {
+            if ( theClass.isInstance( a ) )
+                list.add( (ArcherTower)a );
+        }
+        
+        return list;
+    }
+    
     // returns whether the wave has ended or not
     public static boolean waveCheck(Stage s)
     {
@@ -49,7 +69,24 @@ public class AttackHelper
         // checks to see if any wizards exist  
         if(getListWizard(s, "Wizard").size() != 0)
         {
-            status = false;  // wave isn't over
+            //status = false;  // wave isn't over
+            
+            for (Wizard WizardHandler : getListWizard(s,"Wizard"))
+            {
+                // wizard has special case as false - normal wizard
+                if(WizardHandler.returnSpecialCase() == true)
+                {
+                    status = false; // wave isn't over
+                    //System.out.print("wave isn't over\n");
+                    return status;
+                }
+                
+                else
+                {
+                    status = true; 
+                }
+            }
+            
             //System.out.print("Still wizards on map\n");
             return status;
         }

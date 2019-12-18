@@ -74,11 +74,13 @@ public class Player extends BaseActor
         setDeceleration(700);
         
         setSize(80, 91);
+        this.toFront();
     }
     
     public void act(float dt)
     {
         super.act(dt);
+        this.toFront();
         
         // pause animation when character not moving
         if(getSpeed() == 0 )
@@ -149,13 +151,13 @@ public class Player extends BaseActor
         if(!noMovementCheck)
         {
             // hero movement controls
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) 
+            if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) 
                 accelerateAtAngle(180);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) 
+            if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) 
                 accelerateAtAngle(0);
-            if (Gdx.input.isKeyPressed(Keys.UP)) 
+            if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) 
                 accelerateAtAngle(90);
-            if (Gdx.input.isKeyPressed(Keys.DOWN)) 
+            if (Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.S)) 
                 accelerateAtAngle(270);            
         }
 

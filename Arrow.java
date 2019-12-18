@@ -1,81 +1,140 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.MathUtils;
-//import com.badlogic.gdx.graphics.g2d.TextureRegion;
-//import com.badlogic.gdx.graphics.g2d.Animation;
 
-
+// class to spawn arrows and provide shooting functionality
 public class Arrow extends BaseActor
 {
-    public float AngleToTarget;
-    public float ArrowSizeX = 30;
-    public float ArrowSizeY = 30;
-    public float Timer;
-    public float TimeToDelete = .35f;
-    public double XTarget,YTarget;
-    public double DistanceToTarget;
-    public double XOrigin,YOrigin;
-    //public Animation<TextureRegion> ArrowTexture;
-    public Arrow (float OriginX, float OriginY, Stage s,float TargetX,float TargetY)
-    {
-        
+    // arrow variables
+    private float AngleToTarget;
+    private float ArrowSizeX;
+    private float ArrowSizeY;
+    private float Timer;
+    private float TimeToDelete;
+    private double XTarget,YTarget;
+    private double DistanceToTarget;
+    private float xOrigin,yOrigin;
+    
+    // shooting helper variables
+    private boolean inMotion;
+    
+    // initializes variables
+    public Arrow (float OriginX, float OriginY, Stage s)
+    {       
         super(OriginX,OriginY,s);
-        //Gdx.app.log("Placing Arrow at X",Float.toString(OriginX));
-        //Gdx.app.log("Placing Arrow at Y",Float.toString(OriginY));
-        //Gdx.app.log("The Enemy is at X",Float.toString(TargetX));
-        //Gdx.app.log("The Enemy is at Y",Float.toString(TargetY));
-        //this.ArrowTexture = loadTexture("Assets/Img/Towers/Arrow.png");
+
         loadTexture("Assets/Img/Towers/Arrow.png");
-        setSize(ArrowSizeX,ArrowSizeY);
-        setOrigin(ArrowSizeX/2,ArrowSizeY/2);
-        this.XTarget = TargetX;
-        this.YTarget = TargetY;
-        this.YOrigin = OriginY;
-        this.XOrigin = OriginX;
-        this.AngleToTarget = getAngle(OriginX,OriginY,TargetX,TargetY);
-        this.DistanceToTarget = computeRequiredDistance();
-        //Gdx.app.log("The arrow must fly this far",Double.toString(this.DistanceToTarget));       //Gdx.app.log("The angle to the target is",Double.toString(this.AngleToTarget));
-        setAcceleration(1000);
-        setMaxSpeed(900);
+        setPosition(OriginX, OriginY);
+        makeInvisible(true); // initialize to invisible
         
-      
+        // arrow variable initialization
+        AngleToTarget = 0.0f;
+        ArrowSizeX = 40.0f;
+        ArrowSizeY = 40.0f;
+        
+        setSize(ArrowSizeX, ArrowSizeY);
+        setOrigin(ArrowSizeX/2, ArrowSizeY/2);
+        
+        Timer = 0.0f;
+        TimeToDelete = 0.35f;
+        XTarget = 0;
+        YTarget = 0;
+        DistanceToTarget = 0;
+        xOrigin = OriginX;
+        yOrigin = OriginY;
+        
+        // shooting helper variable initialization
+        inMotion = false;
+        
+        setSpeed(0); // don't move initially
+        setMaxSpeed(1000);  
+        this.toFront();
     }
     
+    // sets the visibility of the arrow
+    public void makeInvisible(boolean state)
+    {
+        this.setVisible(!state); // will make the arrow visible or invisible as necessary
+    }
+         
+    // will perform steps to shoot arrow from origin to target
+    public void shootArrow(float OriginX, float OriginY, float TargetX,float TargetY)
+    {
+        setOrigin(ArrowSizeX/2,ArrowSizeY/2);
+        setPosition(xOrigin, yOrigin); // reset position at tower
+        makeInvisible(false); // make arrow visible
+        inMotion = true; // set motion to occur
+        
+        // set origin and target variables
+        this.XTarget = TargetX;
+        this.YTarget = TargetY;
+        this.yOrigin = OriginY;
+        this.xOrigin = OriginX;
+        
+        // set angle and distance
+        this.AngleToTarget = getAngle(OriginX,OriginY,TargetX,TargetY);
+        this.DistanceToTarget = computeRequiredDistance();
+                        
+        setMotionAngle(AngleToTarget); // sets angle of object
+        setRotation(getMotionAngle()); // sets rotation of image
+        setSpeed(1000);
+        setMaxSpeed(1000);
+    }
+    
+    // performs shooting if enabled
     public void act(float dt)
     {
         super.act(dt);
-        this.setRotation(this.getMotionAngle());
-        this.accelerateAtAngle(this.AngleToTarget);
-        applyPhysics(dt);
-        checkDistance();
         
-    }
-    public void checkDistance()
-    {
-        if (TraveledDistance() >= this.DistanceToTarget)
+        if(inMotion == true)
         {
-            this.remove();
+            this.toFront(); // moves arrow over other objects
+            setMotionAngle(AngleToTarget); // sets angle of object
+            setRotation(getMotionAngle()); // sets rotation of image
+            setSpeed(1000); // moves object at set speed
+            applyPhysics(dt);
+            checkDistance(); // check if object has reached target
         }
         
     }
-    public double TraveledDistance()
+    
+    // check distance of arrow traveled
+    public void checkDistance()
     {
-        return Math.sqrt(Math.pow((this.getX() -XOrigin),2)+Math.pow((this.getY()-YOrigin),2));
+        // indicates arrow has reached target
+        if (TraveledDistance() >= this.DistanceToTarget)
+        {           
+            makeInvisible(true); // make arrow invisible
+            inMotion = false; // stop moving it
+            setPosition(xOrigin, yOrigin); // reset position at tower
+        }
         
     }
+    
+    // calculates traveled distance
+    public double TraveledDistance()
+    {
+        return Math.sqrt(Math.pow((this.getX() -xOrigin),2)+Math.pow((this.getY()-yOrigin),2));       
+    }
+    
+    // calculates distance necessary for travel
     public double computeRequiredDistance()
     {
-      return Math.sqrt(Math.pow((XTarget -XOrigin),2)+Math.pow((YTarget-YOrigin),2));
+        return Math.sqrt(Math.pow((XTarget -xOrigin),2)+Math.pow((YTarget-yOrigin),2));
     }
-    public float getAngle(float originX,float originY, float TargetX,float TargetY)
     
+    // retrieves angle arrow needs to fly at
+    public float getAngle(float originX,float originY, float TargetX,float TargetY)    
     {
         float angle = (float) Math.toDegrees(Math.atan2(TargetY-originY,TargetX-originX));
-        if (angle < 0)
-            {
-                angle+= 360;
-            }  
-            return angle;
+        
+        // ensures angle is a positive number
+        while (angle < 0)
+        {
+            angle+= 360;
+        }  
+            
+        return angle;
     }
     
    
