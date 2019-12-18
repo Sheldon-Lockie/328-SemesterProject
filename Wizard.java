@@ -23,9 +23,11 @@ public class Wizard extends BaseActor
     private boolean path2_4;
     private boolean path3_1;
     private boolean path3_2;
-
+    private boolean path_backwards;
     
-    public Wizard (float x, float y, Stage s, int path)
+    private boolean normalStatus;
+    
+    public Wizard (float x, float y, Stage s, int path, boolean normal)
     {
         super(x,y,s);
         loadTexture("Assets/Img/Enemies/WizardStatic.png");
@@ -51,6 +53,9 @@ public class Wizard extends BaseActor
         path2_4 = false;
         path3_1 = false;
         path3_2 = false;
+        path_backwards = false;
+        
+        normalStatus = normal;
 
         determinePath(path);
         
@@ -69,6 +74,11 @@ public class Wizard extends BaseActor
         applyPhysics(dt);
         
         followPath();
+    }
+    
+    public boolean returnSpecialCase()
+    {
+        return normalStatus;
     }
     
     // will determine which path to take
@@ -100,11 +110,13 @@ public class Wizard extends BaseActor
             case 8:
                 path3_2 = true;
                 break;
+            case 20:
+                path_backwards = true;
+                break;
             default:
                 System.out.print("Spawn Error!\n");
                 path2_1 = true;
         }
-        
         /*System.out.print("path1_1 = " + path1_1 + "\n");
         System.out.print("path1_2 = " + path1_2 + "\n");
 
@@ -549,6 +561,12 @@ public class Wizard extends BaseActor
                     this.check4 = true;
                 }
             }
+        }
+        
+        // for other class purposes
+        else if(this.path_backwards == true)
+        {
+            setMotionAngle(180);
         }
     }
                 

@@ -54,7 +54,7 @@ public class BaseActor extends Group
     {
         // call constructor from Actor class
         super();
-
+        
         // perform additional initialization tasks
         setPosition(x,y);
         s.addActor(this);

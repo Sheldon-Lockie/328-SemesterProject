@@ -6,10 +6,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 
-
-
-
+// class containing the main game loop and features
 public class GameScreen extends BaseScreen
 {
     Button HelpButton;     // Top-Right Help Btn
@@ -17,8 +17,7 @@ public class GameScreen extends BaseScreen
     
     public static float MouseX;
     public static float MouseY;
-    
-    
+        
     /**********************Bools for unit selection*****************************/
     public boolean UnitPickedUp;
     public boolean ArcherTowerPickedUp;    //true whenever an object is picked up, and false once placed in game area
@@ -66,6 +65,7 @@ public class GameScreen extends BaseScreen
     private boolean gameOver;
     private boolean exitLock;
     private float exitTimer;
+    private static boolean outlineCheck;
     
     // spawn variables
     private int numOfEnemies;
@@ -127,6 +127,7 @@ public class GameScreen extends BaseScreen
         gameOver = false;
         exitLock = false;
         exitTimer = 0.0f;
+        outlineCheck = false;
         
         numOfEnemies = 5;
         
@@ -147,7 +148,27 @@ public class GameScreen extends BaseScreen
         
         // ui stuff
         castle = new CastleHealth();
+              
+        // adding listener for tower purposes
+        mainStage.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                // send rectangles to background
+                if(outlineCheck == false)
+                {
+                    for (ArcherTower TowerHandler : attackHelper.getListArcherTower(mainStage,"ArcherTower"))
+                    {
+                        TowerHandler.hideOutline();
+                    }
+                }
                 
+                else
+                {
+                    outlineCheck = false;
+                }
+                
+                System.out.println("clicked stage");
+            }
+        });
     }
  
     public void update (float dt)
@@ -198,6 +219,13 @@ public class GameScreen extends BaseScreen
         }
     }
     
+    // change outline check status
+    public static void enableOutlineCheck(boolean status)
+    {
+        outlineCheck = status;
+    }
+    
+    // method to return to the main menu
     public void exitToMainMenu()
     {
         if(exitLock == false)
@@ -207,13 +235,13 @@ public class GameScreen extends BaseScreen
             // exit message stuff add
         }
             
-            // exits after 5 seconds
-            if(exitTimer >= 5)
-            {
-                manager.endAllSongs();
-                manager.stopLevelMusic();
-                MainGame.setActiveScreen(new MenuScreen());
-            }
+        // exits after 5 seconds
+        if(exitTimer >= 5)
+        {
+            manager.endAllSongs();
+            manager.stopLevelMusic();
+            MainGame.setActiveScreen(new MenuScreen());
+        }
     }
     
     public void setBooleans()
@@ -773,7 +801,7 @@ public class GameScreen extends BaseScreen
             {
                 if(timer1 >= 0.30f)
                 {
-                    new Wizard(15, 500, mainStage, spawn1Selection);
+                    new Wizard(15, 500, mainStage, spawn1Selection, true);
                     timer1 = 0.0f;
                     counter++;
                 }
@@ -794,8 +822,8 @@ public class GameScreen extends BaseScreen
             {
                 if(timer1 >= 0.30f)
                 {
-                    new Wizard(15, 500, mainStage, spawn1Selection);
-                    new Wizard(350, 880, mainStage, spawn2Selection);
+                    new Wizard(15, 500, mainStage, spawn1Selection, true);
+                    new Wizard(350, 880, mainStage, spawn2Selection, true);
                     timer1 = 0.0f;
                     counter++;
                 }
@@ -816,9 +844,9 @@ public class GameScreen extends BaseScreen
             {
                 if(timer1 >= 0.30f)
                 {
-                    new Wizard(15, 500, mainStage, spawn1Selection);
-                    new Wizard(350, 880, mainStage, spawn2Selection);
-                    new Wizard(350, 172, mainStage, spawn3Selection);
+                    new Wizard(15, 500, mainStage, spawn1Selection, true);
+                    new Wizard(350, 880, mainStage, spawn2Selection, true);
+                    new Wizard(350, 172, mainStage, spawn3Selection, true);
                     timer1 = 0.0f;
                     counter++;
                 }

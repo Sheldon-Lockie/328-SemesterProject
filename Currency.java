@@ -9,9 +9,7 @@ public class Currency
         
         
     }
-    
-    
-    
+       
     /** Removes Currency To Player's Balance **/
     public float removeBalance(float amount)
     {
