@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.target=FireBolt
+comment1.params=OriginX\ OriginY\ s
+comment1.target=FireBolt(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ FireBolt\r\n
+comment2.params=state
+comment2.target=void\ makeInvisible(boolean)
+comment3.params=OriginX\ OriginY\ TargetX\ TargetY
+comment3.target=void\ shootFireBolt(float,\ float,\ float,\ float)
+comment4.params=dt
+comment4.target=void\ act(float)
+comment5.params=
+comment5.target=void\ checkDistance()
+comment6.params=
+comment6.target=double\ TraveledDistance()
+comment7.params=
+comment7.target=double\ computeRequiredDistance()
+comment8.params=originX\ originY\ TargetX\ TargetY
+comment8.target=float\ getAngle(float,\ float,\ float,\ float)
+numComments=9

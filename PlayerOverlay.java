@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Sound;
 
 public class PlayerOverlay extends BaseActor
 {
@@ -29,6 +30,9 @@ public class PlayerOverlay extends BaseActor
     private int counter2;
     private Wizard checkWizard;
     private boolean enemyDied;
+    
+    private Sound swordSwingSound;
+    private float soundTimer;
     
     /**
      * Constructor for objects of class PlayerOverlay
@@ -61,6 +65,9 @@ public class PlayerOverlay extends BaseActor
         counter = 0;
         counter2 = 0;
         enemyDied = false;
+        
+        swordSwingSound = Gdx.audio.newSound(Gdx.files.internal("Assets/Sounds/Sword.mp3"));
+        soundTimer = 0.0f;
     }
     
     public void act(float dt)
@@ -77,6 +84,8 @@ public class PlayerOverlay extends BaseActor
             heroCanAttack = true;
         }
         
+        soundTimer += dt;
+        
         // find and attack enemies if hero isn't knocked out
         if(heroActor.knockedOutStatus() == false)
         {
@@ -90,6 +99,7 @@ public class PlayerOverlay extends BaseActor
             {
                 tmpWizard.disengage();
                 heroActor.engaged(false, tmpWizard);
+                tmpWizard = null;
             }
         }
     }
@@ -101,6 +111,13 @@ public class PlayerOverlay extends BaseActor
             if(tmpWizard != null)
             {
                 enemyDied = tmpWizard.decreaseHealthFromHero(damage);
+                
+                // play if timer reaches limit
+                if(soundTimer > 1.5f)
+                {
+                    swordSwingSound.play(0.1f);     
+                    soundTimer = 0.0f;
+                }
                 
                 if(enemyDied == true)
                 {
@@ -148,6 +165,7 @@ public class PlayerOverlay extends BaseActor
             if(tmpWizard != null)
             {
                 tmpWizard.disengage();
+                tmpWizard = null;
             }
             
             heroActor.engaged(false, tmpWizard);

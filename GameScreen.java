@@ -5,12 +5,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 // class containing the main game loop and features
 public class GameScreen extends BaseScreen
@@ -24,7 +27,7 @@ public class GameScreen extends BaseScreen
     /**********************Bools for unit selection*****************************/
     public boolean UnitPickedUp;
     public boolean ArcherTowerPickedUp;    //true whenever an object is picked up, and false once placed in game area
-    public boolean Unit2PickedUp;
+    public boolean MageTowerPickedUp;
     public boolean Unit3PickedUp;
     public boolean Unit4PickedUp;
     public boolean Unit5PickedUp;
@@ -33,10 +36,10 @@ public class GameScreen extends BaseScreen
     /***********************************************************************/
     BaseActor GameArea;     //Placeholder for map area
     BaseActor UnitInfoArea; //Bottom of Screen Unit info area
-    BaseActor UnitArea;     //Unit buy area (Right of screen)
-    BaseActor ArcherTowerMouse;
+    BaseActor UnitArea;     //Unit buy area (Right of screen)   
     /********** Selectively updated positions for each type of unit**********/
-    BaseActor Unit2Mouse;
+    BaseActor ArcherTowerMouse;
+    BaseActor MageTowerMouse;
     BaseActor Unit3Mouse;
     BaseActor Unit4Mouse;
     BaseActor Unit5Mouse;
@@ -87,9 +90,26 @@ public class GameScreen extends BaseScreen
     private BaseActor castleHealthIcon;
     private BaseActor currencyIcon; 
     
+    // baseactor helpers
+    private Animation heartHealth100;
+    private Animation heartHealth90;
+    private Animation heartHealth80;
+    private Animation heartHealth70;
+    private Animation heartHealth60;
+    private Animation heartHealth50;
+    private Animation heartHealth40;
+    private Animation heartHealth30;
+    private Animation heartHealth20;
+    private Animation heartHealth10;
+    private Animation heartHealth0;
+    
     //Cost of towers;
     public int RangeCost = 50;
-    public int MageCost = 50;
+    public int MageCost = 150;
+    
+    // sound effects
+    Sound coinDrop;
+    
     public void initialize()
     {
         
@@ -202,13 +222,40 @@ public class GameScreen extends BaseScreen
         //uiTable.setDebug(true);
         uiTable.pad(750, 700, 10, 10);
         uiTable.left();
-        uiTable.add(castleHealthIcon).left().width(80);
+        uiTable.add(castleHealthIcon).left(); //.width(80);
         uiTable.add(castleHealthLabel).left().width(160);
         uiTable.add().width(100);
         uiTable.add(currencyIcon).left().width(80);
-        uiTable.add(currencyLabel).left().width(200);
+        uiTable.add(currencyLabel).left(); //.width(200);
         uiTable.row();
         uiTable.add(waveLabel).colspan(5).width(300);
+        
+        // base actor initialization
+        String[] health100File = {"assets/Img/UI Elements/Heart100.png"};
+        heartHealth100 = castleHealthIcon.loadAnimationFromFiles(health100File, 1, true);
+        String[] health90File = {"assets/Img/UI Elements/Heart90.png"};
+        heartHealth90 = castleHealthIcon.loadAnimationFromFiles(health90File, 1, true);
+        String[] health80File = {"assets/Img/UI Elements/Heart80.png"};
+        heartHealth80 = castleHealthIcon.loadAnimationFromFiles(health80File, 1, true);
+        String[] health70File = {"assets/Img/UI Elements/Heart70.png"};
+        heartHealth70 = castleHealthIcon.loadAnimationFromFiles(health70File, 1, true);
+        String[] health60File = {"assets/Img/UI Elements/Heart60.png"};
+        heartHealth60 = castleHealthIcon.loadAnimationFromFiles(health60File, 1, true);
+        String[] health50File = {"assets/Img/UI Elements/Heart50.png"};
+        heartHealth50 = castleHealthIcon.loadAnimationFromFiles(health50File, 1, true);
+        String[] health40File = {"assets/Img/UI Elements/Heart40.png"};
+        heartHealth40 = castleHealthIcon.loadAnimationFromFiles(health40File, 1, true);
+        String[] health30File = {"assets/Img/UI Elements/Heart30.png"};
+        heartHealth30 = castleHealthIcon.loadAnimationFromFiles(health30File, 1, true);
+        String[] health20File = {"assets/Img/UI Elements/Heart20.png"};
+        heartHealth20 = castleHealthIcon.loadAnimationFromFiles(health20File, 1, true);
+        String[] health10File = {"assets/Img/UI Elements/Heart10.png"};
+        heartHealth10 = castleHealthIcon.loadAnimationFromFiles(health10File, 1, true);
+        String[] health0File = {"assets/Img/UI Elements/Heart0.png"};
+        heartHealth0 = castleHealthIcon.loadAnimationFromFiles(health0File, 1, true);
+        
+        // sounds
+        coinDrop = Gdx.audio.newSound(Gdx.files.internal("Assets/Sounds/CoinDrop.mp3"));
     }
  
     // updates ui elements //FDAFDA
@@ -223,66 +270,66 @@ public class GameScreen extends BaseScreen
             // castle at top health
             if(castleHealth > 90)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart100.png");
+                castleHealthIcon.setAnimation(heartHealth100);
             }
             
             // castle is between 80 and 90
             else if(castleHealth <= 90 && castleHealth > 80)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart90.png");
+                castleHealthIcon.setAnimation(heartHealth90);
             }
             
             // castle is between 70 and 80
             else if(castleHealth <= 80 && castleHealth > 70)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart80.png");
+                castleHealthIcon.setAnimation(heartHealth80);
             }
             
             // castle is between 60 and 70
             else if(castleHealth <= 70 && castleHealth > 60)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart70.png");
+                castleHealthIcon.setAnimation(heartHealth70);
             }
             
             // castle is between 50 and 60
             else if(castleHealth <= 60 && castleHealth > 50)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart60.png");
+                castleHealthIcon.setAnimation(heartHealth60);
             }
             
             // castle is between 40 and 50
             else if(castleHealth <= 50 && castleHealth > 40)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart50.png");
+                castleHealthIcon.setAnimation(heartHealth50);
             }
             
             // castle is between 30 and 40
             else if(castleHealth <= 40 && castleHealth > 30)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart40.png");
+                castleHealthIcon.setAnimation(heartHealth40);
             }
             
             // castle is between 20 and 30
             else if(castleHealth <= 30 && castleHealth > 20)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart30.png");
+                castleHealthIcon.setAnimation(heartHealth30);
             }
             
             // castle is between 10 and 20
             else if(castleHealth <= 20 && castleHealth > 10)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart20.png");
+                castleHealthIcon.setAnimation(heartHealth20);
             }
             
             // castle is between 0 and 10
             else if(castleHealth <= 10 && castleHealth > 0)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart10.png");
+                castleHealthIcon.setAnimation(heartHealth10);
             }
             
             else if(castleHealth <= 0)
             {
-                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart0.png");
+                castleHealthIcon.setAnimation(heartHealth0);
             }
         }
         
@@ -327,6 +374,7 @@ public class GameScreen extends BaseScreen
                     spawnTimer += dt;
                     if (RewardLock == true)
                     {
+                        coinDrop.play(0.2f);
                         Currency += 100;
                         RewardLock = false;
                         Gdx.app.log("The Player has this much money at the end of the round",Integer.toString(Currency));
@@ -367,12 +415,18 @@ public class GameScreen extends BaseScreen
         if(exitLock == false)
         {
             exitLock = true;
+            BaseActor losingMessage = new BaseActor(0, 0, uiStage);
+            losingMessage.loadTexture("Assets/Img/PlaceHolders/YouDied.png");
+            losingMessage.setSize(900, 217);
+            losingMessage.centerAtPosition(700, 630);
+            losingMessage.setOpacity(0);
+            losingMessage.addAction(Actions.fadeIn(1));
+            GameArea.setOpacity(30);
             
-            // exit message stuff add
         }
             
-        // exits after 5 seconds
-        if(exitTimer >= 5)
+        // exits after 8 seconds
+        if(exitTimer >= 8)
         {
             manager.endAllSongs();
             manager.stopLevelMusic();
@@ -444,11 +498,11 @@ public class GameScreen extends BaseScreen
                     Gdx.app.log("The Currency the player has is:",Integer.toString(Currency));
                     //Gdx.app.log("Unit2 button was clicked",null);
                     UnitPickedUp = true;
-                    Unit2PickedUp = true;
-                    Unit2Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                    Unit2Mouse.loadTexture("Assets/Img/Towers/MageTowerNew.png");
-                    Unit2Mouse.setSize(70,120);
-                    Unit2Mouse.setBoundaryPolygon(4);
+                    MageTowerPickedUp = true;
+                    MageTowerMouse = new BaseActor(MouseX,MouseY,mainStage);
+                    MageTowerMouse.loadTexture("Assets/Img/Towers/MageTowerNew.png");
+                    MageTowerMouse.setSize(70,120);
+                    MageTowerMouse.setBoundaryPolygon(4);
                 }
                 else
                 {
@@ -542,17 +596,17 @@ public class GameScreen extends BaseScreen
                     }
                 }
             }
-            if (Unit2PickedUp)
+            if (MageTowerPickedUp)
             {
-                HoverTowerAtMousePosition(Unit2Mouse);
+                HoverTowerAtMousePosition(MageTowerMouse);
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 )
                 {
-                    if (CheckTowerPlaceMentOverlap(Unit2Mouse) == true)
+                    if (CheckTowerPlaceMentOverlap(MageTowerMouse) == true)
                     {
-                        new Unit2(MouseX,MouseY,mainStage);
+                        new MageTower(MouseX,MouseY,mainStage);
                         UnitPickedUp = false;
-                        Unit2PickedUp = false;
-                        Unit2Mouse.remove();
+                        MageTowerPickedUp = false;
+                        MageTowerMouse.remove();
                     }
                     
                 }
@@ -836,7 +890,7 @@ public class GameScreen extends BaseScreen
        {
            if (WizardHandler.getX() > 1200)
            {
-               castle.reduceHealth(20f); // wizards hit for 20 damage
+               castle.reduceHealth(10f); // wizards hit for 10 damage
                WizardHandler.despawn();
            }
        }
