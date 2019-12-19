@@ -18,7 +18,8 @@ public class ArcherTower extends BaseActor
         setSize(sizeX, sizeY);
         centerAtPosition2(x, y, sizeX, sizeY);
         setBoundaryPolygon(4);
-        CreateRangeRectangle(x,y,s);   
+        CreateRangeRectangle(x,y,s);
+        
         this.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                 GameScreen.enableOutlineCheck(true); // enables check in main loop to signal outline is present

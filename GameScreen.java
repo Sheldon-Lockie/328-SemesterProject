@@ -26,14 +26,6 @@ public class GameScreen extends BaseScreen
     public boolean Unit4PickedUp;
     public boolean Unit5PickedUp;
     public boolean Unit6PickedUp;
-    public boolean Unit7PickedUp;
-    public boolean Unit8PickedUp;
-    public boolean Unit9PickedUp;
-    public boolean Unit10PickedUp;
-    public boolean Unit11PickedUp;
-    public boolean Unit12PickedUp;
-    public boolean Unit13PickedUp;
-    public boolean Unit14PickedUp;
     
     /***********************************************************************/
     BaseActor GameArea;     //Placeholder for map area
@@ -46,14 +38,6 @@ public class GameScreen extends BaseScreen
     BaseActor Unit4Mouse;
     BaseActor Unit5Mouse;
     BaseActor Unit6Mouse;
-    BaseActor Unit7Mouse;
-    BaseActor Unit8Mouse;
-    BaseActor Unit9Mouse;
-    BaseActor Unit10Mouse;
-    BaseActor Unit11Mouse;
-    BaseActor Unit12Mouse;
-    BaseActor Unit13Mouse;
-    BaseActor Unit14Mouse;
     /**********************************************************************/
     
     // Game Manager
@@ -66,6 +50,7 @@ public class GameScreen extends BaseScreen
     private boolean exitLock;
     private float exitTimer;
     private static boolean outlineCheck;
+    private boolean RewardLock;
     
     // spawn variables
     private int numOfEnemies;
@@ -84,15 +69,20 @@ public class GameScreen extends BaseScreen
     
     // ui stuff
     private CastleHealth castle;
+    public static int Currency = 10000;
     
+    //Cost of towers;
+    public int RangeCost = 50;
+    public int MageCost = 50;
     public void initialize()
     {
+        
         BaseActor.setWorldBounds(1350, 900);
         setBooleans();      //sets any bools that need to be set on start
         InitUIElements();   //adds elements that are the background, e.x. Background of units/unit info/map img
         InitButtons();      //creates all the initial buttons that are needed (help btn, unit selection btn)
-        
-       
+        //Currency = 100;
+        RewardLock = true;
         /*******************************************************************/
         /*****************Sets Mouse Cursor*********************************/
         
@@ -150,6 +140,7 @@ public class GameScreen extends BaseScreen
         castle = new CastleHealth();
               
         // adding listener for tower purposes
+        
         mainStage.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                 // send rectangles to background
@@ -166,9 +157,10 @@ public class GameScreen extends BaseScreen
                     outlineCheck = false;
                 }
                 
-                System.out.println("clicked stage");
+                //System.out.println("clicked stage");
             }
         });
+        CreateBounds();
     }
  
     public void update (float dt)
@@ -196,6 +188,12 @@ public class GameScreen extends BaseScreen
                 if(endOfWave == true)
                 {
                     spawnTimer += dt;
+                    if (RewardLock == true)
+                    {
+                        Currency += 100;
+                        RewardLock = false;
+                        Gdx.app.log("The Player has this much money at the end of the round",Integer.toString(Currency));
+                    }
                     
                     if(spawnTimer >= spawnDelay)
                     {
@@ -203,6 +201,7 @@ public class GameScreen extends BaseScreen
                         spawnTimer = 0.0f;
                         endOfWave = false;
                         waveCounter++;
+                        RewardLock = true;
                         spawn1Selection = spawnSelector1();
                         spawn2Selection = spawnSelector2();
                         spawn3Selection = spawnSelector3();
@@ -272,45 +271,59 @@ public class GameScreen extends BaseScreen
         ButtonCreation Unit4TowerBtn =  new ButtonCreation();
         ButtonCreation Unit5TowerBtn =  new ButtonCreation();
         ButtonCreation Unit6TowerBtn =  new ButtonCreation();
-        ButtonCreation Unit7TowerBtn =  new ButtonCreation();
-        ButtonCreation Unit8TowerBtn =  new ButtonCreation();
-        ButtonCreation Unit9TowerBtn =  new ButtonCreation();
-        ButtonCreation Unit10TowerBtn =  new ButtonCreation();
-        ButtonCreation Unit11TowerBtn =  new ButtonCreation();
-        ButtonCreation Unit12TowerBtn =  new ButtonCreation();
-        ButtonCreation Unit13TowerBtn =  new ButtonCreation();
-        ButtonCreation Unit14TowerBtn =  new ButtonCreation();
         
         
-        ArcherTowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit1_Highlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit1_Unhighlighted.png")),1360,622,110,225, new Function(){
+        
+        ArcherTowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit1_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit1_Highlighted.png")),1360,622,110,225, new Function(){
             public void run()
             {
-                //Gdx.app.log("Unit1 button was clicked",null);
-                UnitPickedUp = true;
-                ArcherTowerPickedUp = true;
-                ArcherTowerMouse = new BaseActor(MouseX,MouseY,mainStage);
-                ArcherTowerMouse.loadTexture("Assets/Img/Towers/ArcherTowerNew.png");
-                ArcherTowerMouse.setSize(70,120);
-                ArcherTowerMouse.setBoundaryPolygon(4);
+                if( Currency - RangeCost >= 0)
+                {
+                    Currency -= RangeCost;
+                    //Gdx.app.log("The Currency the player has is:",Integer.toString(Currency));
+                    UnitPickedUp = true;
+                    ArcherTowerPickedUp = true;
+                    ArcherTowerMouse = new BaseActor(MouseX,MouseY,mainStage);
+                    ArcherTowerMouse.loadTexture("Assets/Img/Towers/ArcherTowerNew.png");
+                    ArcherTowerMouse.setSize(70,120);
+                    ArcherTowerMouse.setBoundaryPolygon(4);
+                    
+                }
+                else
+                {
+                    //Gdx.app.log("The Player cant afford this:",null);
+                    //Gdx.app.log("The Currency the player has is:",Integer.toString(Currency));
+                }
+                
             }
         });
         
         Unit2TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit2_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit2_Highlighted.png")),1480,622,110,225, new Function(){
             public void run()
             {
-                //Gdx.app.log("Unit2 button was clicked",null);
-                UnitPickedUp = true;
-                Unit2PickedUp = true;
-                Unit2Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit2Mouse.loadTexture("Assets/Img/Towers/MageTowerNew.png");
-                Unit2Mouse.setSize(70,120);
-                Unit2Mouse.setBoundaryPolygon(4);
+                if( Currency - MageCost >= 0)
+                {
+                    Currency -= MageCost;
+                    Gdx.app.log("The Currency the player has is:",Integer.toString(Currency));
+                    //Gdx.app.log("Unit2 button was clicked",null);
+                    UnitPickedUp = true;
+                    Unit2PickedUp = true;
+                    Unit2Mouse = new BaseActor(MouseX,MouseY,mainStage);
+                    Unit2Mouse.loadTexture("Assets/Img/Towers/MageTowerNew.png");
+                    Unit2Mouse.setSize(70,120);
+                    Unit2Mouse.setBoundaryPolygon(4);
+                }
+                else
+                {
+                    //Gdx.app.log("The Player cant afford this:",null);
+                    //Gdx.app.log("The Currency the player has is:",Integer.toString(Currency));
+                }
             }
+            
         });
-    /*
-        Unit3TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit3_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit3_Highlighted.png")),1360,624,110,110, new Function(){
+        Unit3TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/UnitPlaceHolder_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/UnitPlaceHolder_Highlighted.png")),1360,394,110,225, new Function(){
             public void run()
-            {
+            {/*
                 Gdx.app.log("Unit3 button was clicked",null);
                 UnitPickedUp = true;
                 Unit3PickedUp = true;                
@@ -318,11 +331,13 @@ public class GameScreen extends BaseScreen
                 Unit3Mouse.loadTexture("Assets/Img/Towers/Unit3.png");
                 Unit3Mouse.setSize(80,80);
                 Unit3Mouse.setBoundaryPolygon(4);
+                */
             }
         }); 
-         Unit4TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit4_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit4_Highlighted.png")),1480,624,110,110, new Function(){
+         Unit4TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/UnitPlaceHolder_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/UnitPlaceHolder_Highlighted.png")),1480,394,110,225, new Function(){
             public void run()
             {
+                /*
                 Gdx.app.log("Unit4 button was clicked",null);
                 UnitPickedUp = true;
                 Unit4PickedUp = true;                
@@ -330,11 +345,13 @@ public class GameScreen extends BaseScreen
                 Unit4Mouse.loadTexture("Assets/Img/Towers/Unit4.png");
                 Unit4Mouse.setSize(80,80);
                 Unit4Mouse.setBoundaryPolygon(4);
+                */
             }
         }); 
-        Unit5TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit5_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit5_Highlighted.png")),1360,511,110,110, new Function(){
+        Unit5TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/UnitPlaceHolder_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/UnitPlaceHolder_Highlighted.png")),1360,170,110,225, new Function(){
             public void run()
             {
+                /*
                 Gdx.app.log("Unit5 button was clicked",null);
                 UnitPickedUp = true;
                 Unit5PickedUp = true;                
@@ -342,11 +359,12 @@ public class GameScreen extends BaseScreen
                 Unit5Mouse.loadTexture("Assets/Img/Towers/Unit5.png");
                 Unit5Mouse.setSize(80,80);
                 Unit5Mouse.setBoundaryPolygon(4);
+                */
             }
-        }); 
-         Unit6TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit6_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit6_Highlighted.png")),1480,511,110,110, new Function(){
+        });          Unit6TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/UnitPlaceHolder_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/UnitPlaceHolder_Highlighted.png")),1480,170,110,225, new Function(){
             public void run()
             {
+                /*
                 Gdx.app.log("Unit6 button was clicked",null);
                 UnitPickedUp = true;
                 Unit6PickedUp = true;                
@@ -354,112 +372,18 @@ public class GameScreen extends BaseScreen
                 Unit6Mouse.loadTexture("Assets/Img/Towers/Unit6.png");
                 Unit6Mouse.setSize(80,80);
                 Unit6Mouse.setBoundaryPolygon(4);
+                */
             }
         }); 
-        Unit7TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit7_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit7_Highlighted.png")),1360,398,110,110, new Function(){
-            public void run()
-            {
-                Gdx.app.log("Unit7 button was clicked",null);
-                UnitPickedUp = true;
-                Unit7PickedUp = true;                
-                Unit7Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit7Mouse.loadTexture("Assets/Img/Towers/Unit7.png");
-                Unit7Mouse.setSize(80,80);
-                Unit7Mouse.setBoundaryPolygon(4);
-            }
-        }); 
-        Unit8TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit8_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit8_Highlighted.png")),1480,398,110,110, new Function(){
-            public void run()
-            {
-                Gdx.app.log("Unit8 button was clicked",null);
-                UnitPickedUp = true;
-                Unit8PickedUp = true;                
-                Unit8Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit8Mouse.loadTexture("Assets/Img/Towers/Unit8.png");
-                Unit8Mouse.setSize(80,80);
-                Unit8Mouse.setBoundaryPolygon(4);
-            }
-        }); 
-        Unit9TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit9_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit9_Highlighted.png")),1360,285,110,110, new Function(){
-            public void run()
-            {
-                Gdx.app.log("Unit9 button was clicked",null);
-                UnitPickedUp = true;
-                Unit9PickedUp = true;    
-                Unit9Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit9Mouse.loadTexture("Assets/Img/Towers/Unit9.png");
-                Unit9Mouse.setSize(80,80);
-                Unit9Mouse.setBoundaryPolygon(4);
-            }
-        }); 
-        Unit10TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit10_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit10_Highlighted.png")),1480,285,110,110, new Function(){
-            public void run()
-            {
-                Gdx.app.log("Unit10 button was clicked",null);
-                UnitPickedUp = true;
-                Unit10PickedUp = true;                
-                Unit10Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit10Mouse.loadTexture("Assets/Img/Towers/Unit10.png");
-                Unit10Mouse.setSize(80,80);
-                Unit10Mouse.setBoundaryPolygon(4);
-            }
-        }); 
-        Unit11TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit11_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit11_Highlighted.png")),1360,172,110,110, new Function(){
-            public void run()
-            {
-                Gdx.app.log("Unit11 button was clicked",null);
-                UnitPickedUp = true;
-                Unit11PickedUp = true;               
-                Unit11Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit11Mouse.loadTexture("Assets/Img/Towers/Unit11.png");
-                Unit11Mouse.setSize(80,80);
-                Unit11Mouse.setBoundaryPolygon(4);
-            }
-        }); 
-        Unit12TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit12_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit12_Highlighted.png")),1480,172,110,110, new Function(){
-            public void run()
-            {
-                Gdx.app.log("Unit12 button was clicked",null);
-                UnitPickedUp = true;
-                Unit12PickedUp = true;                
-                Unit12Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit12Mouse.loadTexture("Assets/Img/Towers/Unit12.png");
-                Unit12Mouse.setSize(80,80);
-                Unit12Mouse.setBoundaryPolygon(4);
-            }
-        }); 
-        Unit13TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit13_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit13_Highlighted.png")),1360,59,110,110, new Function(){
-            public void run()
-            {
-                Gdx.app.log("Unit13 button was clicked",null);
-                UnitPickedUp = true;
-                Unit13PickedUp = true;                
-                Unit13Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit13Mouse.loadTexture("Assets/Img/Towers/Unit13.png");
-                Unit13Mouse.setSize(80,80);
-                Unit13Mouse.setBoundaryPolygon(4);
-            }
-        }); 
-        Unit14TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit14_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit14_Highlighted.png")),1480,59,110,110, new Function(){
-            public void run()
-            {
-                Gdx.app.log("Unit14 button was clicked",null);
-                UnitPickedUp = true;
-                Unit14PickedUp = true;
-                Unit14Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit14Mouse.loadTexture("Assets/Img/Towers/Unit14.png");
-                Unit14Mouse.setSize(80,80);
-                Unit14Mouse.setBoundaryPolygon(4);
-            }
-        }); 
+        
         HelpButton.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Help_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Help_Highlighted.png")),1300,850,32,32, new Function(){
             public void run()
             {
                 Gdx.app.log("Help button was clicked",null);
             }
         });
+       
         
-        */
     }
     public void PickAndPlaceManager()
     {
@@ -470,27 +394,33 @@ public class GameScreen extends BaseScreen
             if (ArcherTowerPickedUp)
             {
                 HoverTowerAtMousePosition(ArcherTowerMouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(ArcherTowerMouse) == true)
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860)
                 {
-                    new ArcherTower(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    ArcherTowerPickedUp = false;
-                    ArcherTowerMouse.remove();
-                    
+                    if (CheckTowerPlaceMentOverlap(ArcherTowerMouse) == true)
+                    {
+                        new ArcherTower(MouseX,MouseY,mainStage);
+                        UnitPickedUp = false;
+                        ArcherTowerPickedUp = false;
+                        ArcherTowerMouse.remove();
+                    }
                 }
             }
             if (Unit2PickedUp)
             {
                 HoverTowerAtMousePosition(Unit2Mouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(Unit2Mouse) == true)
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 )
                 {
-                    new Unit2(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    Unit2PickedUp = false;
-                    Unit2Mouse.remove();
+                    if (CheckTowerPlaceMentOverlap(Unit2Mouse) == true)
+                    {
+                        new Unit2(MouseX,MouseY,mainStage);
+                        UnitPickedUp = false;
+                        Unit2PickedUp = false;
+                        Unit2Mouse.remove();
+                    }
                     
                 }
             }
+            /*
             if (Unit3PickedUp)
             {
                 HoverTowerAtMousePosition(Unit3Mouse);
@@ -538,106 +468,8 @@ public class GameScreen extends BaseScreen
                     Unit6Mouse.remove();
                     
                 }
-            }
-             if (Unit7PickedUp)
-            {
-                HoverTowerAtMousePosition(Unit7Mouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(Unit7Mouse) == true)
-                {
-                    new Unit7(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    Unit7PickedUp = false;
-                    Unit7Mouse.remove();
-                    
-                }
-            }
-             if (Unit8PickedUp)
-            {
-                HoverTowerAtMousePosition(Unit8Mouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(Unit8Mouse) == true)
-                {
-                    new Unit8(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    Unit8PickedUp = false;
-                    Unit8Mouse.remove();
-                    
-                }
-            }
-             if (Unit9PickedUp)
-            {
-                HoverTowerAtMousePosition(Unit9Mouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(Unit9Mouse) == true)
-                {
-                    new Unit9(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    Unit9PickedUp = false;
-                    Unit9Mouse.remove();
-                    
-                }
-            }
-             if (Unit10PickedUp)
-            {
-                HoverTowerAtMousePosition(Unit10Mouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(Unit10Mouse) == true)
-                {
-                    new Unit10(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    Unit10PickedUp = false;
-                    Unit10Mouse.remove();
-                    
-                }
-            }
-            if (Unit11PickedUp)
-            {
-                HoverTowerAtMousePosition(Unit11Mouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(Unit11Mouse) == true)
-                {
-                    new Unit11(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    Unit11PickedUp = false;
-                    Unit11Mouse.remove();
-                    
-                }
-            }
+            }*/
             
-            if (Unit12PickedUp)
-            {
-                HoverTowerAtMousePosition(Unit12Mouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(Unit12Mouse) == true)
-                {
-                    new Unit12(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    Unit12PickedUp = false;
-                    Unit12Mouse.remove();
-                    
-                }
-            }
-            
-            if (Unit13PickedUp)
-            {
-                HoverTowerAtMousePosition(Unit13Mouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(Unit13Mouse) == true)
-                {
-                    new Unit13(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    Unit13PickedUp = false;
-                    Unit13Mouse.remove();
-                    
-                }
-            }
-            
-            if (Unit14PickedUp)
-            {
-                HoverTowerAtMousePosition(Unit14Mouse);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && MouseX < 1315 &&MouseX >25 && MouseY > 190 && MouseY <860 && CheckTowerPlaceMentOverlap(Unit14Mouse) == true)
-                {
-                    new Unit14(MouseX,MouseY,mainStage);
-                    UnitPickedUp = false;
-                    Unit14PickedUp = false;
-                    Unit14Mouse.remove();
-                    
-                }
-            }
             
             
             //Gdx.app.log("X is",Float.toString(MouseX));
@@ -656,6 +488,17 @@ public class GameScreen extends BaseScreen
             }
  
         }
+        
+         for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"NoPlacementArea"))
+        {
+            if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+            {
+                Gdx.app.log("Cant be placed here",null);
+                return false;
+                
+            }
+ 
+        }
         for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"Unit2"))
         {
             if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -665,6 +508,7 @@ public class GameScreen extends BaseScreen
             }
  
         }
+        /*
         for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"Unit3"))
         {
             if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -701,78 +545,7 @@ public class GameScreen extends BaseScreen
             }
  
         }
-        for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"Unit7"))
-        {
-            if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-            {
-                return false;
-                
-            }
- 
-        }
-        for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"Unit8"))
-        {
-            if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-            {
-                return false;
-                
-            }
- 
-        }
-        for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"Unit9"))
-        {
-            if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-            {
-                return false;
-                
-            }
- 
-        }
-        for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"Unit10"))
-        {
-            if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-            {
-                return false;
-                
-            }
- 
-        }
-        for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"Unit11"))
-        {
-            if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-            {
-                return false;
-                
-            }
- 
-        }
-        for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"Unit12"))
-        {
-            if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-            {
-                return false;
-                
-            }
- 
-        }
-        for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"Unit13"))
-        {
-            if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-            {
-                return false;
-                
-            }
- 
-        }
-        for (BaseActor PlacedArcherTowerActor : BaseActor.getList(mainStage,"Unit14"))
-        {
-            if (ObjectBeingPlaced.overlaps(PlacedArcherTowerActor) && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-            {
-                return false;
-                
-            }
- 
-        }
+        */
         
         return true;
     }
@@ -792,6 +565,7 @@ public class GameScreen extends BaseScreen
         if(spawnLock)
         {
             endOfWave = attackHelper.waveCheck(mainStage);
+            
         }
         
         // spawns enemies if not locked
@@ -949,6 +723,34 @@ public class GameScreen extends BaseScreen
             manager.stopLevelMusic();
             BaseGame.setActiveScreen( new MenuScreen());
         }
+    }
+    public void CreateBounds()
+    {
+        BaseActor Num1 = new NoPlacementArea(0,465,mainStage,500,175);
+        Num1.setRotation(10);
+        BaseActor Num2 = new NoPlacementArea(450,161,mainStage,750,225);
+        Num2.setRotation(90);
+        BaseActor Num3 = new NoPlacementArea(250,560,mainStage,225,135);
+        Num3.setRotation(60);
+        BaseActor Num4 = new NoPlacementArea(475,350,mainStage,390,40);
+        Num4.setRotation(90);
+        BaseActor Num5 = new NoPlacementArea(475,700,mainStage,375,40);
+        Num5.setRotation(17);
+        BaseActor Num6 = new NoPlacementArea(925,510,mainStage,315,90);
+        Num6.setRotation(3);
+        BaseActor Num7 = new NoPlacementArea(775,325,mainStage,475,170);
+        Num7.setRotation(90);
+        BaseActor Num8 = new NoPlacementArea(475,375,mainStage,200,80);
+        Num8.setRotation(343);
+        BaseActor Num9 = new NoPlacementArea(800,300,mainStage,300,80);
+        Num9.setRotation(30);
+        BaseActor Num10 = new NoPlacementArea(800,575,mainStage,100,10);
+        Num10.setRotation(0);
+        BaseActor Num11 = new NoPlacementArea(840,800,mainStage,150,50);
+        Num11.setRotation(325);
+        BaseActor Num12 = new NoPlacementArea(920,740,mainStage,200,50);
+        Num12.setRotation(300);
+        
     }
     
     

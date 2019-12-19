@@ -668,6 +668,7 @@ public class Wizard extends BaseActor
         // indicates death
         if(this.health <= 0)
         {
+            GameScreen.Currency++;
             this.remove();
         }
     }

@@ -134,12 +134,12 @@ public class RangeRectangle extends BaseActor
                 check = true;
             }  
             
-            WizardHandler.setColor(Color.BLUE); // set to blue if in range
+            //WizardHandler.setColor(Color.BLUE); // set to blue if in range
             
             // if a wizard is within range of tower
             if (WizardHandler.overlaps(RangeRectangle))
             {
-                WizardHandler.setColor(Color.GRAY);
+                //WizardHandler.setColor(Color.GRAY);
                 
                 // if the wizard is further right but less than 720
                 if((WizardHandler.getX() > tmpWizard.getX()) && (WizardHandler.getX() < 720))
@@ -176,7 +176,7 @@ public class RangeRectangle extends BaseActor
                 }                                
             }   
             
-            tmpWizard.setColor(Color.GOLD); // set furthest forward to gold
+            //tmpWizard.setColor(Color.GOLD); // set furthest forward to gold
         }
         
         if(check2 == false)
