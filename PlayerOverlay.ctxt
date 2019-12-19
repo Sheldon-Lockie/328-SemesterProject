@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=PlayerOverlay
+comment1.params=x\ y\ s\ SizeX\ SizeY
+comment1.target=PlayerOverlay(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage,\ float,\ float)
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ PlayerOverlay\r\n
+comment2.params=dt
+comment2.target=void\ act(float)
+comment3.params=
+comment3.target=void\ performAttack()
+comment4.params=
+comment4.target=void\ selectTargets()
+comment5.params=
+comment5.target=void\ attack()
+comment6.params=
+comment6.target=void\ enemyDied()
+numComments=7
