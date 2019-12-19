@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=NoPlacementArea
+comment1.params=x\ y\ s\ SizeX\ SizeY
+comment1.target=NoPlacementArea(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage,\ float,\ float)
+numComments=2
