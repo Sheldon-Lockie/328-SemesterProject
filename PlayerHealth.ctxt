@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=PlayerHealth
+comment1.params=x\ y\ s
+comment1.target=PlayerHealth(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ PlayerHealth\r\n
+comment2.params=dt
+comment2.target=void\ act(float)
+comment3.params=
+comment3.target=void\ followPlayer()
+comment4.params=
+comment4.target=void\ updateHealth()
+numComments=5

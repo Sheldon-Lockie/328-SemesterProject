@@ -7,9 +7,12 @@ import com.badlogic.gdx.Input.Keys;
 
 public class SettingsScreen extends BaseScreen
 {
+    private BaseActor background;
+    
     public void initialize()
     {
-        //Gdx.app.log("This is the Settings Screen",null);
+        background =  new BaseActor(0,0,uiStage);
+        background.loadTexture("Assets/Img/PlaceHolders/SettingsMenu.png");
     }
  
     public void update (float dt)

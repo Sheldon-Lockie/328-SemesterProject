@@ -1,3 +1,7 @@
+/**
+ * Range Circle - provides hit box range for mage tower
+ */
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -6,12 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.graphics.Color;
 
-// class to define the range rectangle around archer tower
-public class RangeRectangle extends BaseActor
+public class RangeCircle2 extends BaseActor
 {
     // tower variables
     private float TimeBetweenShots; //in seconds
-    private BaseActor RangeRectangle = this;
+    private BaseActor RangeCircle2 = this;
     private float Timer;
     private boolean TowerCanShoot;
     private AttackHelper attackHelper;
@@ -19,11 +22,11 @@ public class RangeRectangle extends BaseActor
     private float Y;
     
     // arrow variables
-    private Arrow arrow1;
-    private Arrow arrow2;
+    private FireBolt fireBolt1;
+    private FireBolt fireBolt2;
     
-    private boolean arrow1InUse;
-    private boolean arrow2InUse;
+    private boolean fireBolt1InUse;
+    private boolean fireBolt2InUse;
     
     // extras
     private Wizard tmpWizard;
@@ -33,12 +36,15 @@ public class RangeRectangle extends BaseActor
     private boolean check2;
     private int damage;
     
-    public RangeRectangle (float x, float y, Stage s, float SizeX, float SizeY)
+    /**
+     * Constructor for objects of class RangeCircle2
+     */
+    public RangeCircle2(float x, float y, Stage s, float SizeX, float SizeY)
     {
         super(x,y,s);
         
         MainStage = s;
-        
+       
         loadTexture("Assets/Img/Towers/TowerOverlayTransparent.png");
         setOpacity(0);
         setSize(SizeX,SizeY);      
@@ -46,7 +52,7 @@ public class RangeRectangle extends BaseActor
         this.Y = GameScreen.MouseY;
         centerAtPosition(X,Y);
         
-        TimeBetweenShots = 0.50f;
+        TimeBetweenShots = 0.85f;
        
         setBoundaryPolygon(8);
         toBack();
@@ -57,20 +63,20 @@ public class RangeRectangle extends BaseActor
         attackHelper = new AttackHelper();
         
         // arrow initialization - only loads 2 arrows
-        arrow1InUse = false;
-        arrow2InUse = false;
-        arrow1 = new Arrow(this.X - 5, this.Y + 20, s);
-        arrow2 = new Arrow(this.X, this.Y, s);
+        fireBolt1InUse = false;
+        fireBolt2InUse = false;
+        fireBolt1 = new FireBolt(this.X - 5, this.Y + 20, s);
+        fireBolt2 = new FireBolt(this.X, this.Y, s);
 
         // extras
         tmpWizard = null;
         targetWizard = null;
         check = false;
         check2 = false;
-        damage = 25; // tower does 25 damage
+        damage = 100; // tower does 25 damage
     }
     
-    public void act(float dt)
+     public void act(float dt)
     {
         super.act(dt);
         
@@ -89,7 +95,7 @@ public class RangeRectangle extends BaseActor
                 
             if(targetWizard != null)
             {
-                shootArrow(targetWizard); // shoot at that enemy
+                shootFireBolt(targetWizard); // shoot at that enemy
                 targetWizard = null;
                 tmpWizard = null;
             }
@@ -99,8 +105,8 @@ public class RangeRectangle extends BaseActor
         {
             //CheckForRange(MainStage);
             this.TowerCanShoot = true;
-            arrow1InUse = false;
-            arrow2InUse = false;
+            fireBolt1InUse = false;
+            fireBolt2InUse = false;
             Timer = 0.0f;
         }       
     }
@@ -136,7 +142,7 @@ public class RangeRectangle extends BaseActor
             //WizardHandler.setColor(Color.BLUE); // set to blue if in range
             
             // if a wizard is within range of tower
-            if (WizardHandler.overlaps(RangeRectangle))
+            if (WizardHandler.overlaps(RangeCircle2))
             {
                 //WizardHandler.setColor(Color.GRAY);
                 
@@ -189,29 +195,29 @@ public class RangeRectangle extends BaseActor
     }
     
     // triggers arrow to shoot
-    private void shootArrow(Wizard target)
+    private void shootFireBolt(Wizard target)
     {
         if(this.TowerCanShoot)
         {
             this.Timer = 0.0f;
             this.TowerCanShoot = false;
             
-            if(!arrow1InUse)
+            if(!fireBolt1InUse)
             {
                 if(target.getX() > 0 && target.getX() < 1200)
                 {
-                    arrow1.shootArrow(this.X - 5, this.Y + 20, target.getX(), target.getY());
-                    arrow1InUse = true;
+                    fireBolt1.shootFireBolt(this.X - 5, this.Y + 20, target.getX(), target.getY());
+                    fireBolt1InUse = true;
                 }
             }
             
             // should never make it here but just in case
-            else if(!arrow2InUse)
+            else if(!fireBolt2InUse)
             {
                 if(target.getX() > 0 && target.getX() < 1200)
                 {
-                    arrow2.shootArrow(this.X, this.Y, target.getX(), target.getY());
-                    arrow2InUse = true;
+                    fireBolt2.shootFireBolt(this.X, this.Y, target.getX(), target.getY());
+                    fireBolt2InUse = true;
                 }
             }
             
@@ -219,4 +225,3 @@ public class RangeRectangle extends BaseActor
         }
     } 
 }
-    
