@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.target=MageTower
+comment1.params=x\ y\ s
+comment1.target=MageTower(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ MageTower\r\n
+comment2.params=event\ x\ y
+comment2.target=void\ clicked(com.badlogic.gdx.scenes.scene2d.InputEvent,\ float,\ float)
+comment3.params=dt
+comment3.target=void\ act(float)
+comment4.params=CenterX\ CenterY\ s
+comment4.target=void\ CreateRangeCircle2(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
+comment5.params=
+comment5.target=void\ hideOutline()
+numComments=6

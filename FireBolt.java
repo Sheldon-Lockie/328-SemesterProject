@@ -1,15 +1,18 @@
+/**
+ * FireBolt attack
+ */
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.audio.Sound;
 
-// class to spawn arrows and provide shooting functionality
-public class Arrow extends BaseActor
+public class FireBolt extends BaseActor
 {
-    // arrow variables
+    // firebolt variables
     private float AngleToTarget;
-    private float ArrowSizeX;
-    private float ArrowSizeY;
+    private float fireSizeX;
+    private float fireSizeY;
     private float Timer;
     private float TimeToDelete;
     private double XTarget,YTarget;
@@ -19,34 +22,36 @@ public class Arrow extends BaseActor
     // shooting helper variables
     private boolean inMotion;
     
-    private Sound arrowSound;
+    private Sound fireSound;
     
-    // initializes variables
-    public Arrow (float OriginX, float OriginY, Stage s)
-    {       
+    /**
+     * Constructor for objects of class FireBolt
+     */
+    public FireBolt(float OriginX, float OriginY, Stage s)
+    {
         super(OriginX,OriginY,s);
 
-        loadTexture("Assets/Img/Towers/Arrow.png");
+        loadTexture("Assets/Img/Towers/FireBolt.png"); // change to firebolt
         setPosition(OriginX, OriginY);
         makeInvisible(true); // initialize to invisible
         
         // arrow variable initialization
         AngleToTarget = 0.0f;
-        ArrowSizeX = 40.0f;
-        ArrowSizeY = 40.0f;
+        fireSizeX = 60.0f;
+        fireSizeY = 40.0f;
         
-        setSize(ArrowSizeX, ArrowSizeY);
-        setOrigin(ArrowSizeX/2, ArrowSizeY/2);
+        setSize(fireSizeX, fireSizeY);
+        setOrigin(fireSizeX/2, fireSizeY/2);
         
         Timer = 0.0f;
-        TimeToDelete = 0.35f;
+        TimeToDelete = 0.50f;
         XTarget = 0;
         YTarget = 0;
         DistanceToTarget = 0;
         xOrigin = OriginX;
         yOrigin = OriginY;
         
-        arrowSound = Gdx.audio.newSound(Gdx.files.internal("Assets/Sounds/Bow.mp3"));
+        fireSound = Gdx.audio.newSound(Gdx.files.internal("Assets/Sounds/FireBolt.mp3"));
         
         // shooting helper variable initialization
         inMotion = false;
@@ -61,12 +66,12 @@ public class Arrow extends BaseActor
     {
         this.setVisible(!state); // will make the arrow visible or invisible as necessary
     }
-         
+    
     // will perform steps to shoot arrow from origin to target
-    public void shootArrow(float OriginX, float OriginY, float TargetX,float TargetY)
+    public void shootFireBolt(float OriginX, float OriginY, float TargetX,float TargetY)
     {
-        arrowSound.play(0.05f);
-        setOrigin(ArrowSizeX/2,ArrowSizeY/2);
+        fireSound.play(0.1f);
+        setOrigin(fireSizeX/2,fireSizeY/2);
         setPosition(xOrigin, yOrigin); // reset position at tower
         makeInvisible(false); // make arrow visible
         inMotion = true; // set motion to occur
@@ -83,7 +88,7 @@ public class Arrow extends BaseActor
                         
         setMotionAngle(AngleToTarget); // sets angle of object
         setRotation(getMotionAngle()); // sets rotation of image
-        setSpeed(1000);
+        setSpeed(700);
         setMaxSpeed(1000);
     }
     
@@ -97,7 +102,7 @@ public class Arrow extends BaseActor
             this.toFront(); // moves arrow over other objects
             setMotionAngle(AngleToTarget); // sets angle of object
             setRotation(getMotionAngle()); // sets rotation of image
-            setSpeed(1000); // moves object at set speed
+            setSpeed(700); // moves object at set speed
             applyPhysics(dt);
             checkDistance(); // check if object has reached target
         }
@@ -113,7 +118,7 @@ public class Arrow extends BaseActor
             makeInvisible(true); // make arrow invisible
             inMotion = false; // stop moving it
             setPosition(xOrigin, yOrigin); // reset position at tower
-        }        
+        }       
     }
     
     // calculates traveled distance
@@ -141,6 +146,4 @@ public class Arrow extends BaseActor
             
         return angle;
     }
-    
-   
 }

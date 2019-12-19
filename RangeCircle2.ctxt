@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=RangeCircle2
+comment1.params=x\ y\ s\ SizeX\ SizeY
+comment1.target=RangeCircle2(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage,\ float,\ float)
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ RangeCircle2\r\n
+comment2.params=dt
+comment2.target=void\ act(float)
+comment3.params=
+comment3.target=void\ sendToFront()
+comment4.params=
+comment4.target=void\ sendToBack()
+comment5.params=
+comment5.target=Wizard\ selectTarget()
+comment6.params=target
+comment6.target=void\ shootFireBolt(Wizard)
+numComments=7

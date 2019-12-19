@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Sound;
 
 // the player controlled hero
 public class Player extends BaseActor
@@ -37,6 +38,8 @@ public class Player extends BaseActor
     private float centerY;
     private Wizard tmpWizard;
     
+    private PlayerHealth playerHealth;
+       
     public Player (float x, float y, Stage s)
     {
         super(x,y,s);
@@ -73,7 +76,7 @@ public class Player extends BaseActor
                 "Assets/Img/Player/LeftAnimations/Stabbing/PlayerStabLeft2.png",
                 "Assets/Img/Player/LeftAnimations/Stabbing/PlayerStabLeft3.png",};
         westAttack = loadAnimationFromFiles(westAttackFiles, frameDuration2, true);
-        String[] knockedOutFiles = {"Assets/Img/Player/LeftAnimations/Stabbing/PlayerStabLeftBase.png"};
+        String[] knockedOutFiles = {"Assets/Img/Player/PlayerDead.png"};
         knockedOutAnimation = loadAnimationFromFiles(knockedOutFiles, frameDuration2, true);
                
         // default to facing south
@@ -96,14 +99,16 @@ public class Player extends BaseActor
         knockedOut = false;
         maxHealth = 100;
         health = maxHealth;
-        knockedOutDuration = 7.0f;
+        knockedOutDuration = 5.0f;
         engagedFlag = false;
         healthTimer = 0.0f;
         tmpWizard = null;
         
-        setAcceleration(200);
-        setMaxSpeed(200);
-        setDeceleration(700);
+        playerHealth = new PlayerHealth(getX(), getY(), s);
+        
+        setAcceleration(1000);
+        setMaxSpeed(175);
+        setDeceleration(1000);
         
         setSize(80, 91);
         this.toFront();
@@ -118,8 +123,8 @@ public class Player extends BaseActor
         {
             healthTimer += dt;
             
-            // every 5 seconds add 20 health if not knocked out or engaged
-            if(healthTimer >= 5)
+            // every 3 seconds add 20 health if not knocked out or engaged
+            if(healthTimer >= 3)
             {
                 addHealth(20);
                 healthTimer = 0.0f;
@@ -132,6 +137,7 @@ public class Player extends BaseActor
             knockedOutTimer += dt;
 
             setAnimation(knockedOutAnimation);
+            setSize(105, 105);
             setAnimationPaused(false);
             
             if(knockedOutTimer >= knockedOutDuration)
@@ -143,7 +149,7 @@ public class Player extends BaseActor
         }
         
         // pause animation when character not moving
-        if(getSpeed() == 0 )
+        else if(getSpeed() == 0 )
         {
             if(engagedFlag == true)
             {   
