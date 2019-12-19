@@ -8,6 +8,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 
 // class containing the main game loop and features
 public class GameScreen extends BaseScreen
@@ -59,7 +62,6 @@ public class GameScreen extends BaseScreen
     private float spawnTimer;
     private int counter;
     private boolean endOfWave;
-    private int waveCounter;
     private int spawn1Selection;
     private int spawn2Selection;
     private int spawn3Selection;
@@ -70,6 +72,20 @@ public class GameScreen extends BaseScreen
     // ui stuff
     private CastleHealth castle;
     public static int Currency = 10000;
+    
+    // ui labels 
+    private Label playerHealthLabel; 
+    private Label castleHealthLabel;
+    private Label currencyLabel;
+    private Label waveLabel;
+    
+    // ui helpers 
+    private int playerHealth;
+    private float castleHealth;
+    private int waveCounter;
+    private BaseActor playerHealthIcon;
+    private BaseActor castleHealthIcon;
+    private BaseActor currencyIcon; 
     
     //Cost of towers;
     public int RangeCost = 50;
@@ -161,11 +177,132 @@ public class GameScreen extends BaseScreen
             }
         });
         CreateBounds();
+        
+                // ui helper initialization //FDAFDA
+        playerHealth = 0;
+        castleHealth = 0;
+        Currency = 0;
+        waveCounter = 0;
+        
+        // ui initialization 
+        playerHealthLabel = new Label(" x " + playerHealth, BaseGame.labelStyle); 
+        castleHealthLabel = new Label(" x " + castleHealth, BaseGame.labelStyle);
+        currencyLabel = new Label(" x " + Currency, BaseGame.labelStyle);
+        waveLabel = new Label("Wave: " + waveCounter, BaseGame.labelStyle);
+        
+        playerHealthIcon = new BaseActor(0, 0, uiStage);
+        //playerHealthIcon.loadTexture("assets/Img/UI Elements/Heart100.png");
+        castleHealthIcon = new BaseActor(0, 0, uiStage);
+        castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart100.png");
+        castleHealthIcon.setSize(60, 60);
+        currencyIcon = new BaseActor(0, 0, uiStage);
+        currencyIcon.loadTexture("assets/Img/UI Elements/Coin.png");
+        currencyIcon.setSize(60, 60);
+        
+        //uiTable.setDebug(true);
+        uiTable.pad(750, 700, 10, 10);
+        uiTable.left();
+        uiTable.add(castleHealthIcon).left().width(80);
+        uiTable.add(castleHealthLabel).left().width(160);
+        uiTable.add().width(100);
+        uiTable.add(currencyIcon).left().width(80);
+        uiTable.add(currencyLabel).left().width(200);
+        uiTable.row();
+        uiTable.add(waveLabel).colspan(5).width(300);
     }
  
+    // updates ui elements //FDAFDA
+    public void updateUI()
+    {       
+        castleHealth = (int)castle.getHealth();
+        castleHealthLabel.setText(" x " + (int)castleHealth);
+        currencyLabel.setText(" x " + Currency);
+        
+        if(castleHealth <= 100)
+        {
+            // castle at top health
+            if(castleHealth > 90)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart100.png");
+            }
+            
+            // castle is between 80 and 90
+            else if(castleHealth <= 90 && castleHealth > 80)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart90.png");
+            }
+            
+            // castle is between 70 and 80
+            else if(castleHealth <= 80 && castleHealth > 70)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart80.png");
+            }
+            
+            // castle is between 60 and 70
+            else if(castleHealth <= 70 && castleHealth > 60)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart70.png");
+            }
+            
+            // castle is between 50 and 60
+            else if(castleHealth <= 60 && castleHealth > 50)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart60.png");
+            }
+            
+            // castle is between 40 and 50
+            else if(castleHealth <= 50 && castleHealth > 40)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart50.png");
+            }
+            
+            // castle is between 30 and 40
+            else if(castleHealth <= 40 && castleHealth > 30)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart40.png");
+            }
+            
+            // castle is between 20 and 30
+            else if(castleHealth <= 30 && castleHealth > 20)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart30.png");
+            }
+            
+            // castle is between 10 and 20
+            else if(castleHealth <= 20 && castleHealth > 10)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart20.png");
+            }
+            
+            // castle is between 0 and 10
+            else if(castleHealth <= 10 && castleHealth > 0)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart10.png");
+            }
+            
+            else if(castleHealth <= 0)
+            {
+                castleHealthIcon.loadTexture("assets/Img/UI Elements/Heart0.png");
+            }
+        }
+        
+        if(waveCounter == 0)
+        {
+            int tmp = 1;
+            waveLabel.setText("Wave: " + tmp);           
+        }
+        
+       else
+       {
+           waveLabel.setText("Wave: " + waveCounter);
+       }        
+    }
+    
     public void update (float dt)
     {
         EscCheck(); //Checks if esc key has been hit, if hit returns to mainmenu (Eventually Level Selector)
+        
+        updateUI();
         
         // performs the following while the game is running
         if(!gameOver)
