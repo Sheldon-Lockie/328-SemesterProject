@@ -105,7 +105,7 @@ public class GameScreen extends BaseScreen
     
     //Cost of towers;
     public int RangeCost = 50;
-    public int MageCost = 150;
+    public int MageCost = 100;
     
     // sound effects
     Sound coinDrop;
@@ -185,6 +185,11 @@ public class GameScreen extends BaseScreen
                     for (ArcherTower TowerHandler : attackHelper.getListArcherTower(mainStage,"ArcherTower"))
                     {
                         TowerHandler.hideOutline();
+                    }
+                    
+                    for(MageTower MageHandler : attackHelper.getListMageTower(mainStage, "MageTower"))
+                    {
+                        MageHandler.hideOutline();
                     }
                 }
                 
@@ -567,12 +572,12 @@ public class GameScreen extends BaseScreen
             }
         }); 
         
-        HelpButton.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Help_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Help_Highlighted.png")),1300,850,32,32, new Function(){
+        /*HelpButton.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Help_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Help_Highlighted.png")),1300,850,32,32, new Function(){
             public void run()
             {
                 Gdx.app.log("Help button was clicked",null);
             }
-        });
+        });*/
        
         
     }
