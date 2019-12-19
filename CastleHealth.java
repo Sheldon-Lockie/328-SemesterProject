@@ -7,7 +7,7 @@ public class CastleHealth
     public CastleHealth()
     {
         System.out.print("Starting Health: 100\n");
-        health = 1000;    //chaannnggeee     
+        health = 100;    //chaannnggeee     
     }
     
     
