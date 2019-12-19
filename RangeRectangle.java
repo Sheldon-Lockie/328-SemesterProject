@@ -33,7 +33,7 @@ public class RangeRectangle extends BaseActor
     private boolean check2;
     private int damage;
     
-    public RangeRectangle (float x, float y, Stage s,float SizeX,float SizeY)
+    public RangeRectangle (float x, float y, Stage s, float SizeX, float SizeY)
     {
         super(x,y,s);
         
@@ -41,7 +41,7 @@ public class RangeRectangle extends BaseActor
         
         //loadTexture("Assets/Img/Towers/Unit14.png");
         loadTexture("Assets/Img/Towers/TowerOverlayTransparent.png");
-        setOpacity(90);
+        setOpacity(0);
         setSize(SizeX,SizeY);      
         this.X =  GameScreen.MouseX;
         this.Y = GameScreen.MouseY;

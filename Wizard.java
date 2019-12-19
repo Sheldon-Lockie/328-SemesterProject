@@ -26,6 +26,23 @@ public class Wizard extends BaseActor
     private boolean path_backwards;
     
     private boolean normalStatus;
+
+    
+    // extras for fighting
+    private Player heroActor;
+    private boolean canFight;
+    private float fightTimer;
+    private boolean engagedFlag;
+    private float fightDelay;
+    private float savedAngle;
+    private boolean doubleChecky;
+    private boolean savedCheck1;
+    private boolean savedCheck2;
+    private boolean savedCheck3;
+    private boolean savedCheck4;
+    private boolean savedCheck5;
+    private boolean savedCheck6;
+    private int damage;
     
     public Wizard (float x, float y, Stage s, int path, boolean normal)
     {
@@ -44,6 +61,13 @@ public class Wizard extends BaseActor
         check5 = false;
         check6 = false;
         
+        savedCheck1 = check1;
+        savedCheck2 = check2;
+        savedCheck3 = check3;
+        savedCheck4 = check4;
+        savedCheck5 = check5;
+        savedCheck6 = check6;
+        
         path1_1 = false;
         path1_2 = false;
 
@@ -59,6 +83,16 @@ public class Wizard extends BaseActor
 
         determinePath(path);
         
+        // extras
+        canFight = true;
+        fightTimer = 0.0f;
+        engagedFlag = false;
+        heroActor = s.getRoot().findActor("hero");
+        fightDelay = 1.5f;
+        savedAngle = 0.0f;
+        doubleChecky = false;
+        damage = 5;
+        
         // spped tuning
         setSpeed(100);
         setMaxSpeed(100);
@@ -72,6 +106,17 @@ public class Wizard extends BaseActor
         super.act(dt);
         
         applyPhysics(dt);
+        
+        if(!canFight)
+        {
+            fightTimer += dt;
+            
+            if(fightTimer >= fightDelay)
+            {
+                fightTimer = 0.0f;
+                canFight = true;
+            }
+        }
         
         followPath();
     }
@@ -133,20 +178,48 @@ public class Wizard extends BaseActor
     
     }
     
+    public void fight()
+    {
+        // remove health from hero if possible
+        if(canFight)
+        {
+            setSpeed(0);
+            
+            heroActor.removeHealth(damage);
+            canFight = false;
+            fightTimer = 0.0f;
+            System.out.print("Hero health is: " + heroActor.retrieveHealth() + "\n");
+        }
+    }
+    
     // will send character along a set path
     public void followPath()
-    {
+    {   
         // Just in case check - boundary check
         if(getX() > 1205)
         {
             this.remove();
         }
         
+        if(engagedFlag == true)
+        {    
+            setMotionAngle(savedAngle);
+            fight();
+        }
+        
+        else if(doubleChecky == true)
+        {
+            doubleChecky = false;
+            setMotionAngle(savedAngle);
+            setSpeed(100);
+        }
+        
         /*
          * The following are paths from the top spawn
          */
-        if(this.path1_1 == true)
+        else if(this.path1_1 == true)
         {
+            setSpeed(100);
             if(this.check1 == false)
             {
                 setMotionAngle(270);
@@ -192,6 +265,7 @@ public class Wizard extends BaseActor
         
         else if(this.path1_2 == true)
         {
+            setSpeed(100);
              if(this.check1 == false)
              {
                  setMotionAngle(270);
@@ -250,6 +324,7 @@ public class Wizard extends BaseActor
          */
         else if(this.path2_1 == true)
         {
+            setSpeed(100);
             if(this.getX() > 350)
             {
                 if(this.check1 == false)
@@ -303,6 +378,7 @@ public class Wizard extends BaseActor
         
         else if(this.path2_2 == true)
         {
+            setSpeed(100);
             if(this.getX() > 350)
             {
                 if(this.check1 == false)
@@ -365,6 +441,7 @@ public class Wizard extends BaseActor
         
         else if(this.path2_3 == true)
         {
+            setSpeed(100);
             if(this.getX() > 350)
             {
                 if(this.check1 == false)
@@ -427,6 +504,7 @@ public class Wizard extends BaseActor
         
         else if(this.path2_4 == true)
         {
+            setSpeed(100);
             if(this.getX() > 350)
             {
                 if(this.check1 == false)
@@ -475,6 +553,7 @@ public class Wizard extends BaseActor
         
         else if(this.path3_1 == true)
         {
+            setSpeed(100);
             if(this.check1 == false)
                 {
                     setMotionAngle(90);
@@ -529,6 +608,7 @@ public class Wizard extends BaseActor
         
         else if(this.path3_2 == true)
         {
+            setSpeed(100);
             if(this.check1 == false)
             {
                 setMotionAngle(90);
@@ -566,6 +646,7 @@ public class Wizard extends BaseActor
         // for other class purposes
         else if(this.path_backwards == true)
         {
+            setSpeed(100);
             setMotionAngle(180);
         }
     }
@@ -580,6 +661,74 @@ public class Wizard extends BaseActor
         {
             this.remove();
         }
+    }
+    
+    // will decrease the wizard health by the damage parameter
+    public boolean decreaseHealthFromHero(int damage)
+    {
+        this.health -= damage;
+        
+        // indicates death
+        if(this.health <= 0)
+        {
+            this.remove();
+            return true; // he died           
+        }
+        
+        else
+        {
+            return false; // still alive
+        }
+    }
+    
+    // keeps wizard engaged with hero
+    public void engaged()
+    {
+        engagedFlag = true;
+        doubleChecky = true;
+        savedCheck1 = check1;
+        savedCheck2 = check2;
+        savedCheck3 = check3;
+        savedCheck4 = check4;
+        savedCheck5 = check5;
+        savedCheck6 = check6;
+        savedAngle = getMotionAngle();
+        
+        if(savedCheck6 == true)
+        {
+            check6 = false;
+        }
+        
+        else if(savedCheck5 == true)
+        {
+            check5 = false;
+        }
+        
+        else if(savedCheck4 == true)
+        {
+            check4 = false;
+        }
+        
+        else if(savedCheck3 == true)
+        {
+            check3 = false;
+        }
+        
+        else if(savedCheck2 == true)
+        {
+            check2 = false;
+        }
+        
+        else if(savedCheck1 == true)
+        {
+            check1 = false;
+        }
+    }
+    
+    // disengage from hero
+    public void disengage()
+    {
+        engagedFlag = false;
     }
     
     public void despawn()

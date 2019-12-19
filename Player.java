@@ -9,19 +9,33 @@ import com.badlogic.gdx.Input.Keys;
 // the player controlled hero
 public class Player extends BaseActor
 {
-    Animation north;
-    Animation south;
-    Animation east;
-    Animation west;
-    
+    private Animation north;
+    private Animation south;
+    private Animation east;
+    private Animation west;
+    private Animation westAttack;
+    private Animation knockedOutAnimation;
+     
     float facingAngle;
     
     private float frameDuration;
+    private float frameDuration2;
     private boolean noMovementCheck;
     
     private float Timer;
+    private float healthTimer;
     private boolean heroCanAttack;
     private float attackDelay;
+    private PlayerOverlay overlay;
+    private int health;
+    private boolean knockedOut;
+    private int maxHealth;
+    private float knockedOutTimer;
+    private float knockedOutDuration;
+    private boolean engagedFlag;
+    private float centerX;
+    private float centerY;
+    private Wizard tmpWizard;
     
     public Player (float x, float y, Stage s)
     {
@@ -32,6 +46,7 @@ public class Player extends BaseActor
         setSize(20, 68);
         
         frameDuration = 0.2f;
+        frameDuration2 = 0.1f;
         
         String[] northFiles = {"Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeftBase.png",
                 "Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeft1.png",
@@ -53,6 +68,13 @@ public class Player extends BaseActor
                 "Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeft2.png",
                 "Assets/Img/Player/LeftAnimations/Walking/PlayerWalkLeft3.png"};
         west = loadAnimationFromFiles(westFiles, frameDuration, true);
+        String[] westAttackFiles = {"Assets/Img/Player/LeftAnimations/Stabbing/PlayerStabLeftBase.png",
+                "Assets/Img/Player/LeftAnimations/Stabbing/PlayerStabLeft1.png",
+                "Assets/Img/Player/LeftAnimations/Stabbing/PlayerStabLeft2.png",
+                "Assets/Img/Player/LeftAnimations/Stabbing/PlayerStabLeft3.png",};
+        westAttack = loadAnimationFromFiles(westAttackFiles, frameDuration2, true);
+        String[] knockedOutFiles = {"Assets/Img/Player/LeftAnimations/Stabbing/PlayerStabLeftBase.png"};
+        knockedOutAnimation = loadAnimationFromFiles(knockedOutFiles, frameDuration2, true);
                
         // default to facing south
         setAnimation(south);
@@ -67,8 +89,18 @@ public class Player extends BaseActor
         // other variables
         Timer = 0.0f;
         heroCanAttack = true;
-        attackDelay = 0.5f;
-
+        attackDelay = 0.3f;
+        centerX = (this.getWidth() / 2) + x;
+        centerY = (this.getHeight() / 2) + y;
+        overlay = new PlayerOverlay(x, y, s, 90, 100);       
+        knockedOut = false;
+        maxHealth = 100;
+        health = maxHealth;
+        knockedOutDuration = 7.0f;
+        engagedFlag = false;
+        healthTimer = 0.0f;
+        tmpWizard = null;
+        
         setAcceleration(200);
         setMaxSpeed(200);
         setDeceleration(700);
@@ -82,14 +114,84 @@ public class Player extends BaseActor
         super.act(dt);
         this.toFront();
         
+        if(!knockedOut && !engagedFlag)
+        {
+            healthTimer += dt;
+            
+            // every 5 seconds add 20 health if not knocked out or engaged
+            if(healthTimer >= 5)
+            {
+                addHealth(20);
+                healthTimer = 0.0f;
+                System.out.print("new health of hero: " + retrieveHealth() + "\n");
+            }
+        }
+        
+        if(knockedOut == true)
+        {
+            knockedOutTimer += dt;
+
+            setAnimation(knockedOutAnimation);
+            setAnimationPaused(false);
+            
+            if(knockedOutTimer >= knockedOutDuration)
+            {
+                knockedOut = false;
+                knockedOutTimer = 0.0f;
+                addHealth(maxHealth);
+            }
+        }
+        
         // pause animation when character not moving
         if(getSpeed() == 0 )
         {
-            setAnimation(west);
-            setAnimationPaused(true);
-            setSize(80, 91);
+            if(engagedFlag == true)
+            {   
+                if(tmpWizard.getX() < this.getX())
+                {
+                    setAnimation(westAttack);
+                    setAnimationPaused(false);
+                    setSize(80, 91);
+                }
+                
+                else if(tmpWizard.getX() > this.getX())
+                {
+                    tmpWizard.moveBy(-30, 0);
+                    setAnimation(westAttack);
+                    setAnimationPaused(false);
+                    setSize(80, 91);
+                }
+            }
+            
+            // idle left animation
+            else
+            {
+                setAnimation(west);
+                setAnimationPaused(true);
+                setSize(80, 91);
+            }
         }
         
+        // attacks if engaged
+        else if(engagedFlag == true)
+        {
+            if(tmpWizard.getX() < this.getX())
+                {
+                    setAnimation(westAttack);
+                    setAnimationPaused(false);
+                    setSize(80, 91);
+                }
+                
+                else if(tmpWizard.getX() > this.getX())
+                {
+                    tmpWizard.moveBy(-30, 0);
+                    setAnimation(westAttack);
+                    setAnimationPaused(false);
+                    setSize(80, 91);
+                }
+        }
+        
+        // otherwises walking animation
         else
         {
             setAnimationPaused(false);
@@ -148,7 +250,7 @@ public class Player extends BaseActor
         }
         
         // moves hero if button is pressed and it's allowed
-        if(!noMovementCheck)
+        if(!noMovementCheck && !knockedOut)
         {
             // hero movement controls
             if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) 
@@ -178,18 +280,15 @@ public class Player extends BaseActor
        for (BaseActor WizardHandler : BaseActor.getList(s,"Wizard"))
        {
            if (WizardHandler.overlaps(this))
-           {
-               
+           {               
                if (this.heroCanAttack)
                {
                    this.Timer  = 0;
                    Gdx.app.log("Character attacked",null);
                    this.heroCanAttack = false;
                    //WizardHandler.decreaseHealth(50);
-               }
-               
-           }
-           
+               }              
+           }          
        }
     }
     
@@ -197,4 +296,62 @@ public class Player extends BaseActor
     {
         return facingAngle;
     }   
+    
+    // returns health amount
+    public int retrieveHealth()
+    {
+        return health;
+    }
+    
+    // adds health
+    public void addHealth(int amount)
+    {
+        health += amount;
+        
+        if(health > maxHealth)
+        {
+            health = maxHealth;
+        }
+    }
+    
+    // remove health
+    public void removeHealth(int amount)
+    {
+        health -= amount;
+        
+        if(health <= 0)
+        {
+            health = 0;
+            knockedOut = true;
+            knockedOutTimer = 0.0f;
+        }
+    }
+    
+    public boolean knockedOutStatus()
+    {
+        return knockedOut;
+    }
+    
+    // player attacking
+    public void engaged(boolean status, Wizard wizzyBoi)
+    {
+        engagedFlag = status;
+        if(wizzyBoi != null)
+        {
+            tmpWizard = wizzyBoi;
+        }
+        
+        else
+        {
+            tmpWizard = null;
+        }
+        
+        if(status == true)
+        {
+            facingAngle = 180;
+            setAnimation(westAttack);
+            setSize(80, 91);
+        }
+    }
+    
 }
