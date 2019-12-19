@@ -10,7 +10,7 @@ public class NoPlacementArea extends BaseActor
         loadTexture("Assets/Img/PlaceHolders/DebugPlacementArea.png");
         setSize(SizeX,SizeY);
         setBoundaryPolygon(4);
-        setOpacity(.2f);
+        setOpacity(0f);
         
     }
     
