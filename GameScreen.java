@@ -258,7 +258,7 @@ public class GameScreen extends BaseScreen
         UnitInfoArea =  new BaseActor(0,0,mainStage);
         UnitInfoArea.loadTexture("Assets/Img/PlaceHolders/UnitInfoPlaceHolder.png");
         UnitArea = new BaseActor(1350,0,mainStage);
-        UnitArea.loadTexture("Assets/Img/PlaceHolders/UnitsPlaceHolder.png");
+        UnitArea.loadTexture("Assets/Img/PlaceHolders/UnitPlaceHolder.png");
         
         new Player(1100, 490, mainStage); // spawn player in
     }
@@ -282,7 +282,7 @@ public class GameScreen extends BaseScreen
         ButtonCreation Unit14TowerBtn =  new ButtonCreation();
         
         
-        ArcherTowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Towers/ArcherTowerNew.png")),new Texture (Gdx.files.internal("Assets/Img/Towers/ArcherTowerNew.png")),1360,737,110,110, new Function(){
+        ArcherTowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit1_Highlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit1_Unhighlighted.png")),1360,622,110,225, new Function(){
             public void run()
             {
                 //Gdx.app.log("Unit1 button was clicked",null);
@@ -294,19 +294,20 @@ public class GameScreen extends BaseScreen
                 ArcherTowerMouse.setBoundaryPolygon(4);
             }
         });
-        Unit2TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit2_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit2_Highlighted.png")),1480,737,110,110, new Function(){
+        
+        Unit2TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit2_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit2_Highlighted.png")),1480,622,110,225, new Function(){
             public void run()
             {
-                Gdx.app.log("Unit2 button was clicked",null);
+                //Gdx.app.log("Unit2 button was clicked",null);
                 UnitPickedUp = true;
                 Unit2PickedUp = true;
                 Unit2Mouse = new BaseActor(MouseX,MouseY,mainStage);
-                Unit2Mouse.loadTexture("Assets/Img/Towers/Unit2.png");
-                Unit2Mouse.setSize(80,80);
+                Unit2Mouse.loadTexture("Assets/Img/Towers/MageTowerNew.png");
+                Unit2Mouse.setSize(70,120);
                 Unit2Mouse.setBoundaryPolygon(4);
             }
         });
-    
+    /*
         Unit3TowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit3_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit3_Highlighted.png")),1360,624,110,110, new Function(){
             public void run()
             {
@@ -458,7 +459,7 @@ public class GameScreen extends BaseScreen
             }
         });
         
-        
+        */
     }
     public void PickAndPlaceManager()
     {

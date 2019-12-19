@@ -31,7 +31,7 @@ public class ArcherTower extends BaseActor
     public void act(float dt)
     {
         super.act(dt);
-        //this.toFront();
+        this.toFront();
     }
     
     // creates rectangle for collisions and spawns arrows as necessary

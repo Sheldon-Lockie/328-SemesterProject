@@ -7,9 +7,12 @@ import com.badlogic.gdx.Input.Keys;
  */
 public class HelpScreen extends BaseScreen
 {
+    BaseActor Background;
     public void initialize()
     {
         //Gdx.app.log("This is the Settings Screen",null);
+        Background =  new BaseActor(0,0,uiStage);
+        Background.loadTexture("Assets/Img/PlaceHolders/HelpMenu.png");
     }
  
     public void update (float dt)
