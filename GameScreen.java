@@ -282,15 +282,15 @@ public class GameScreen extends BaseScreen
         ButtonCreation Unit14TowerBtn =  new ButtonCreation();
         
         
-        ArcherTowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Buttons/Unit1_Unhighlighted.png")),new Texture (Gdx.files.internal("Assets/Img/Buttons/Unit1_Highlighted.png")),1360,737,110,110, new Function(){
+        ArcherTowerBtn.CreateButton(mainStage, new Texture(Gdx.files.internal("Assets/Img/Towers/ArcherTowerNew.png")),new Texture (Gdx.files.internal("Assets/Img/Towers/ArcherTowerNew.png")),1360,737,110,110, new Function(){
             public void run()
             {
                 //Gdx.app.log("Unit1 button was clicked",null);
                 UnitPickedUp = true;
                 ArcherTowerPickedUp = true;
                 ArcherTowerMouse = new BaseActor(MouseX,MouseY,mainStage);
-                ArcherTowerMouse.loadTexture("Assets/Img/Towers/ArcherTower.png");
-                ArcherTowerMouse.setSize(80,80);
+                ArcherTowerMouse.loadTexture("Assets/Img/Towers/ArcherTowerNew.png");
+                ArcherTowerMouse.setSize(70,120);
                 ArcherTowerMouse.setBoundaryPolygon(4);
             }
         });

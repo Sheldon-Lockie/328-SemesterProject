@@ -1,9 +1,12 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
+import com.badlogic.gdx.graphics.g2d.Animation;
 
 public class Wizard extends BaseActor
 {   
+    private Animation walkingAnimation;
+    private float frameDuration;
+    
     private int health;
     
     // pathing variables
@@ -47,8 +50,14 @@ public class Wizard extends BaseActor
     public Wizard (float x, float y, Stage s, int path, boolean normal)
     {
         super(x,y,s);
-        loadTexture("Assets/Img/Enemies/WizardStatic.png");
-        setSize(26,42);
+        
+        frameDuration = 0.2f;
+        String[] walkingFiles = {"Assets/Img/Enemies/WizardWalkBase.png",
+            "Assets/Img/Enemies/WizardWalk1.png"};
+        walkingAnimation = loadAnimationFromFiles(walkingFiles, frameDuration, true);
+        setAnimation(walkingAnimation);
+        
+        setSize(30,41);
         setBoundaryPolygon(8);
 
         health = 100;
