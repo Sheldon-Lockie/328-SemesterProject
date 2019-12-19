@@ -681,14 +681,20 @@ public class Wizard extends BaseActor
         // indicates death
         if(this.health <= 0)
         {
+            GameScreen.Currency++;
             this.remove();
-            return true; // he died           
+            return true; // he died                                  
         }
         
         else
         {
             return false; // still alive
         }
+    }
+    
+    public int retrieveHealth()
+    {
+        return health;
     }
     
     // keeps wizard engaged with hero

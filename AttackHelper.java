@@ -57,6 +57,26 @@ public class AttackHelper
         return list;
     }
     
+    // retrieves a list of all mage tower actors to reference their methods
+    public static ArrayList<MageTower> getListMageTower(Stage stage, String className)
+    {
+        ArrayList<MageTower> list = new ArrayList<MageTower>();
+
+        Class theClass = null;
+        try
+        {  theClass = Class.forName(className);  }
+        catch (Exception error)
+        {  error.printStackTrace();  }
+
+        for (Actor a : stage.getActors())
+        {
+            if ( theClass.isInstance( a ) )
+                list.add( (MageTower)a );
+        }
+        
+        return list;
+    }
+    
     // returns whether the wave has ended or not
     public static boolean waveCheck(Stage s)
     {
