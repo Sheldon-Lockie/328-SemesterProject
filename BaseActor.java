@@ -102,6 +102,11 @@ public class BaseActor extends Group
     {
         setPosition( x - getWidth()/2 , y - getHeight()/2 );
     }
+    
+    public void centerAtPosition2(float x, float y, float sizeX, float sizeY)
+    {
+        setPosition( x - sizeX/2 , y - sizeY/2 );
+    }
 
     /** 
      *  Repositions this BaseActor so its center is aligned

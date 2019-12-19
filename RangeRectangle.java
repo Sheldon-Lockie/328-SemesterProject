@@ -60,7 +60,7 @@ public class RangeRectangle extends BaseActor
         // arrow initialization - only loads 2 arrows
         arrow1InUse = false;
         arrow2InUse = false;
-        arrow1 = new Arrow(this.X, this.Y, s);
+        arrow1 = new Arrow(this.X - 5, this.Y + 20, s);
         arrow2 = new Arrow(this.X, this.Y, s);
 
         // extras
@@ -201,7 +201,7 @@ public class RangeRectangle extends BaseActor
             {
                 if(target.getX() > 0 && target.getX() < 1200)
                 {
-                    arrow1.shootArrow(this.X, this.Y, target.getX(), target.getY());
+                    arrow1.shootArrow(this.X - 5, this.Y + 20, target.getX(), target.getY());
                     arrow1InUse = true;
                 }
             }

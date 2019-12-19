@@ -12,11 +12,11 @@ public class ArcherTower extends BaseActor
     public ArcherTower (float x, float y, Stage s)
     {
         super(x,y,s);
-        loadTexture("Assets/Img/Towers/ArcherTower.png");
-        centerAtPosition(GameScreen.MouseX,GameScreen.MouseY);
-        sizeX = 80;
-        sizeY = 80;
+        loadTexture("Assets/Img/Towers/ArcherTowerNew.png");        
+        sizeX = 70;
+        sizeY = 120;        
         setSize(sizeX, sizeY);
+        centerAtPosition2(x, y, sizeX, sizeY);
         setBoundaryPolygon(4);
         CreateRangeRectangle(x,y,s);   
         this.addListener(new ClickListener(){
@@ -31,7 +31,7 @@ public class ArcherTower extends BaseActor
     public void act(float dt)
     {
         super.act(dt);
-        this.toFront();
+        //this.toFront();
     }
     
     // creates rectangle for collisions and spawns arrows as necessary
