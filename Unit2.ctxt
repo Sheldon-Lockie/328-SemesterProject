@@ -2,4 +2,6 @@
 comment0.target=Unit2
 comment1.params=x\ y\ s
 comment1.target=Unit2(float,\ float,\ com.badlogic.gdx.scenes.scene2d.Stage)
-numComments=2
+comment2.params=dt
+comment2.target=void\ act(float)
+numComments=3
